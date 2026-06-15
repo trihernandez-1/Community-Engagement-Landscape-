@@ -8,11 +8,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root {
-    --bg: #FAFAF8;
+    --bg: #F2F4FF;
     --card: #FFFFFF;
-    --border: #E5E3DB;
-    --text: #2C2C2A;
-    --text-secondary: #888780;
+    --border: #D0D5F5;
+    --text: #1A1F3A;
+    --text-secondary: #5A607A;
   }
   * { box-sizing: border-box; }
   body {
@@ -28,15 +28,206 @@
   h2 { font-size: 17px; font-weight: 600; margin: 0 0 0.25rem; }
   .section-desc { color: var(--text-secondary); font-size: 13px; margin: 0 0 1rem; }
   section { margin-bottom: 3rem; }
+  .hero {
+    padding: 3rem 0 2.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: 0 0 0.5rem;
+  }
+  .hero h1 {
+    font-size: 36px;
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+    line-height: 1.15;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    max-width: 640px;
+    margin: 0 0 2rem;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .stat-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+  }
+  .stat-num {
+    font-size: 36px;
+    font-weight: 600;
+    color: #607cff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  .process-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .process-step {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+  }
+  .process-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #E8ECFF;
+    color: #607cff;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .process-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .process-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .process-arrow {
+    color: var(--text-secondary);
+    font-size: 18px;
+    padding-top: 1.1rem;
+    flex-shrink: 0;
+  }
+  .tension-block {
+    border-left: 4px solid #607cff;
+    padding: 1.5rem 1.75rem;
+    margin: 0 0 3rem;
+    background: #E8ECFF;
+    border-radius: 0 12px 12px 0;
+  }
+  .tension-quote {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2030A0;
+    line-height: 1.4;
+    margin: 0 0 0.75rem;
+  }
+  .tension-sub {
+    font-size: 13.5px;
+    color: #3a57e8;
+    line-height: 1.65;
+    margin: 0;
+    max-width: 620px;
+  }
+  .exclusion-row {
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--border);
+    cursor: default;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .exclusion-row:last-child { border-bottom: none; }
+  .exclusion-row:hover { background: #E8ECFF; }
+  .excl-row-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .excl-label {
+    width: 185px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .excl-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .excl-bar {
+    height: 100%;
+    border-radius: 99px;
+    background: #607cff;
+  }
+  .excl-count {
+    width: 28px;
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .excl-tools {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    padding: 5px 0 2px 0;
+    display: none;
+    line-height: 1.5;
+  }
+  .exclusion-row:hover .excl-tools { display: block; }
+  .closing-block {
+    margin: 3rem 0 2rem;
+    border-top: 1px solid var(--border);
+    padding-top: 2.5rem;
+  }
+  .closing-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 1.25rem;
+  }
+  .closing-qs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .closing-q {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
   #bubbles { position: relative; width: 100%; height: 420px; }
   .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 12px;
   }
+  .flip-card .flip-front {
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .flip-card.highlighted .flip-front {
+    border-color: #607cff;
+    box-shadow: 0 0 0 2px #607cff;
+  }
+  .flip-card.dimmed {
+    opacity: 0.3;
+  }
   .flip-card {
     perspective: 800px;
     height: 130px;
+    transition: opacity 0.25s;
   }
   .flip-inner {
     position: relative;
@@ -89,14 +280,14 @@
   .spotlight-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-left: 4px solid #534AB7;
+    border-left: 4px solid #c14cff;
     border-radius: 12px;
     padding: 1.1rem 1.25rem;
   }
   .spotlight-tag {
     font-size: 13px;
     font-weight: 600;
-    color: #534AB7;
+    color: #c14cff;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     margin-bottom: 0.5rem;
@@ -129,14 +320,14 @@
     padding: 5px 12px;
     border-radius: 999px;
     border: 1px solid var(--border);
-    background: var(--bg);
+    background: #F2F4FF;
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
   }
   .tag-pill:hover, .tag-pill.active {
-    background: #EEEDFE;
-    border-color: #7F77DD;
-    color: #3C3489;
+    background: #E8ECFF;
+    border-color: #607cff;
+    color: #2030A0;
   }
   #needsToolList {
     margin-top: 12px;
@@ -269,8 +460,59 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>Community engagement tech — theme explorer</h1>
-  <p class="subtitle">Patterns across a market research database of community engagement tools</p>
+  <div class="hero">
+    <p class="hero-eyebrow">Market landscape research</p>
+    <h1>Community engagement tech</h1>
+    <p class="hero-sub">A structured survey of the tools being used to involve communities in planning and decision-making: what they do well, where they fall short, and who they leave out.</p>
+    <div class="stats-row">
+      <div class="stat-block">
+        <div class="stat-num">18</div>
+        <div class="stat-label">Tools analyzed</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">34</div>
+        <div class="stat-label">Participation styles mapped</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">23</div>
+        <div class="stat-label">Unmet needs identified</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">9</div>
+        <div class="stat-label">Use case categories</div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2>How this was built</h2>
+    <p class="section-desc">Each tool was researched, tagged, and structured into a database across seven dimensions.</p>
+    <div class="process-row">
+      <div class="process-step">
+        <div class="process-num">1</div>
+        <div class="process-label">Tool discovery</div>
+        <div class="process-desc">Identified 18 tools across civic tech, urban planning, and GovTech through desk research</div>
+      </div>
+      <div class="process-arrow">→</div>
+      <div class="process-step">
+        <div class="process-num">2</div>
+        <div class="process-label">Tagging framework</div>
+        <div class="process-desc">Developed a consistent set of categories: use cases, participation styles, exclusion risks, unmet needs, and more</div>
+      </div>
+      <div class="process-arrow">→</div>
+      <div class="process-step">
+        <div class="process-num">3</div>
+        <div class="process-label">Database</div>
+        <div class="process-desc">Each tool tagged across all dimensions, creating a structured dataset for cross-tool comparison</div>
+      </div>
+      <div class="process-arrow">→</div>
+      <div class="process-step">
+        <div class="process-num">4</div>
+        <div class="process-label">This visualization</div>
+        <div class="process-desc">Patterns and themes surfaced from the database into an interactive landscape view</div>
+      </div>
+    </div>
+  </section>
 
   <section>
     <h2>The products</h2>
@@ -280,7 +522,7 @@
 
   <section>
     <h2>Participation themes</h2>
-    <p class="section-desc">Bubble size reflects how often each participation style appears across tools. Hover a bubble to see which tools use it.</p>
+    <p class="section-desc">Bubble size reflects how often each participation style appears across tools. Hover a bubble to highlight which products use it.</p>
     <div class="chart-card">
       <div id="bubbles" style="height: 420px;"></div>
       <div id="bubbleToolList">Hover a bubble to see which tools use that participation style.</div>
@@ -298,47 +540,60 @@
     </div>
   </section>
 
+  <div class="tension-block">
+    <p class="tension-quote">Most tools are good at collecting input.<br>Almost none close the loop.</p>
+    <p class="tension-sub">Across 18 tools, the pattern is consistent: participation gets facilitated, data gets gathered. But communities rarely find out what happened next. The field has built sophisticated ways to listen, and almost no infrastructure for responding.</p>
+  </div>
+
   <section>
     <h2>Unmet needs</h2>
-    <p class="section-desc">Where current tools fall short — a few patterns worth sitting with, plus the fuller picture.</p>
+    <p class="section-desc">Where current tools fall short. A few patterns worth sitting with, plus the fuller picture.</p>
 
     <div class="spotlight-grid">
       <div class="spotlight-card">
         <div class="spotlight-tag">Feedback loops</div>
-        <p class="spotlight-text">Participants often aren't told what happened after they contributed. They share ideas, fill out surveys, or attend workshops &mdash; then the process moves on without circling back to say what was used, what wasn't, and why. Without this loop, engagement can start to feel performative, and trust erodes over repeated cycles.</p>
+        <p class="spotlight-text">Participants often aren't told what happened after they contributed. They share ideas, fill out surveys, or attend workshops. Then the process moves on without circling back to say what was used, what wasn't, and why. Without this loop, engagement can start to feel performative, and trust erodes over repeated cycles.</p>
         <div class="spotlight-tools" data-tools="InCitu, Maptionnaire, SuperBarrio, CitizenOS, Social Pinpoint, UrbanistAI"></div>
       </div>
       <div class="spotlight-card">
         <div class="spotlight-tag">Connection to decision making</div>
-        <p class="spotlight-text">Even when input is collected well, it's often unclear how (or whether) it actually shapes the final decision. Few tools make this link visible &mdash; showing participants exactly where their voice entered the process and what weight it carried alongside other inputs like budget or technical constraints.</p>
+        <p class="spotlight-text">Even when input is collected well, it's often unclear how (or whether) it actually shapes the final decision. Few tools make this link visible, showing participants exactly where their voice entered the process and what weight it carried alongside other inputs like budget or technical constraints.</p>
         <div class="spotlight-tools" data-tools="What We Cherish, Build: The Place Game, UrbanistAI"></div>
       </div>
       <div class="spotlight-card">
         <div class="spotlight-tag">Consensus building</div>
-        <p class="spotlight-text">The most common gap in the dataset. Many tools are good at collecting a wide range of opinions but offer little support for helping a group actually converge &mdash; surfacing where people agree, working through disagreement, or building toward a shared recommendation.</p>
+        <p class="spotlight-text">The most common gap in the dataset. Many tools are good at collecting a wide range of opinions but offer little support for helping a group actually converge: surfacing where people agree, working through disagreement, or building toward a shared recommendation.</p>
         <div class="spotlight-tools" data-tools="InCitu, PlaceSpeak, CitiBot, Cortico, Decidim, Social Pinpoint, Social Point"></div>
       </div>
       <div class="spotlight-card">
         <div class="spotlight-tag">Evaluating participation itself</div>
-        <p class="spotlight-text">Most tools focus on running the engagement &mdash; surveys, forums, mapping, deliberation &mdash; but almost none turn around and ask how well it actually went. Was the process inclusive? Did it reach the people it was meant to reach? Was input quality good enough to act on? Without quantitative evaluation of the process itself, organizations have little basis for improving their engagement strategy over time. Only one tool in this dataset is built specifically for this.</p>
+        <p class="spotlight-text">Most tools focus on running the engagement: surveys, forums, mapping, deliberation. Almost none turn around and ask how well it actually went. Was the process inclusive? Did it reach the people it was meant to reach? Was input quality good enough to act on? Without quantitative evaluation of the process itself, organizations have little basis for improving their engagement strategy over time. Only one tool in this dataset is built specifically for this.</p>
         <div class="spotlight-tools" data-tools="Vaki Radar"></div>
       </div>
     </div>
 
     <div class="other-needs">
-      <p class="section-desc" style="margin-bottom: 0.75rem;">Other unmet needs across the dataset &mdash; click to see which tools touch on each.</p>
+      <p class="section-desc" style="margin-bottom: 0.75rem;">Other unmet needs across the dataset. Click a tag to see which tools touch on each.</p>
       <div class="tag-pills" id="otherNeeds"></div>
       <div id="needsToolList">Click a tag to see related tools.</div>
     </div>
   </section>
 
   <section>
+    <h2>Who gets left out</h2>
+    <p class="section-desc">Every tool carries exclusion risks. Hover a row to see which tools are affected.</p>
+    <div class="chart-card">
+      <div id="exclusionGrid"></div>
+    </div>
+  </section>
+
+  <section>
     <h2>Highlights</h2>
-    <p class="section-desc">Three favorites from this research &mdash; click a panel to expand.</p>
+    <p class="section-desc">Three favorites from this research. Click a panel to read more.</p>
     <div class="highlight-deck" id="highlightDeck"></div>
   </section>
 
-  <footer>Built from the community engagement tech market research dataset.</footer>
+  <footer>Built from a market research database of 18 community engagement tools. 2025.</footer>
 </div>
 
 <script>
@@ -356,26 +611,59 @@ const useCaseTools = {
 "Prioritizing among goals": ["CitizenOS","Maptionnaire","Polis","Social Pinpoint","Social Point","Vaki Radar"]
 };
 
+// ---------- Exclusion risks ----------
+const exclusionData = [
+  {label: "Digital literacy", count: 12, tools: ["What We Cherish","InCitu","PlaceSpeak","Maptionnaire","Polis","CitiBot","SuperBarrio","CitizenOS","Decidim","Social Pinpoint","UrbanistAI","Social Point"]},
+  {label: "Language barrier", count: 10, tools: ["Build: The Place Game","PlaceSpeak","Maptionnaire","Vaki Talk","SuperBarrio","Cortico","Decidim","Social Pinpoint","UrbanistAI","Social Point"]},
+  {label: "Digital access", count: 9, tools: ["InCitu","Polis","SuperBarrio","CitizenOS","Cortico","Decidim","Social Pinpoint","UrbanistAI","Social Point"]},
+  {label: "Time constraints", count: 6, tools: ["PlaceSpeak","Maptionnaire","SuperBarrio","Cortico","Decidim","Social Pinpoint"]},
+  {label: "Spatial literacy", count: 2, tools: ["Maptionnaire","SuperBarrio"]},
+  {label: "Complex experiences", count: 2, tools: ["Polis","CitiBot"]},
+  {label: "Non-western audiences", count: 1, tools: ["What We Cherish"]},
+  {label: "Physical mobility", count: 1, tools: ["InCitu"]},
+  {label: "Residency barriers", count: 1, tools: ["PlaceSpeak"]},
+  {label: "AI discomfort", count: 1, tools: ["CitiBot"]},
+  {label: "Gaming literacy", count: 1, tools: ["SuperBarrio"]},
+  {label: "Low income", count: 1, tools: ["CitizenOS"]},
+  {label: "Low literacy", count: 1, tools: ["Social Pinpoint"]},
+  {label: "Disability", count: 1, tools: ["UrbanistAI"]}
+];
+
+const maxEx = 12;
+const exGrid = document.getElementById('exclusionGrid');
+exclusionData.forEach(d => {
+  const row = document.createElement('div');
+  row.className = 'exclusion-row';
+  row.innerHTML = `
+    <div class="excl-row-top">
+      <div class="excl-label">${d.label}</div>
+      <div class="excl-bar-wrap"><div class="excl-bar" style="width:${(d.count/maxEx)*100}%"></div></div>
+      <div class="excl-count">${d.count}</div>
+    </div>
+    <div class="excl-tools">${d.tools.join(', ')}</div>`;
+  exGrid.appendChild(row);
+});
+
 // ---------- Highlights ----------
 const highlights = [
   {
     name: "Vaki Radar",
     mark: "V",
-    color: "#534AB7",
+    color: "#8c99c1",
     tagline: "Quality and impact assessment of engagements",
-    text: "While almost every other tool in this dataset focuses on running participation, Vaki Radar turns around and measures it &mdash; giving organizations a quantitative read on how inclusive, representative, and effective an engagement process actually was, so future efforts can improve."
+    text: "While almost every other tool in this dataset focuses on running participation, Vaki Radar turns around and measures it, giving organizations a quantitative read on how inclusive, representative, and effective an engagement process actually was, so future efforts can improve."
   },
   {
     name: "SuperBarrio",
     mark: "S",
-    color: "#0F6E56",
+    color: "#a88cad",
     tagline: "A 3D game environment for community design",
-    text: "SuperBarrio turns urban planning into something playable. By putting community design into an immersive 3D game, it gives younger people a hands-on, visual way to learn about urban issues and contribute real ideas that planners can use &mdash; participation that doesn't feel like a survey."
+    text: "SuperBarrio turns urban planning into something playable. By putting community design into an immersive 3D game, it gives younger people a hands-on, visual way to learn about urban issues and contribute real ideas that planners can use. Participation that doesn't feel like a survey."
   },
   {
     name: "Social Point",
     mark: "P",
-    color: "#993C1D",
+    color: "#b78e8e",
     tagline: "Bridging conversations between stakeholders and communities",
     text: "Social Point stands out for connecting stakeholder and community conversations in one place, with an interface that's clean, fun, and intuitive. It manages to feel approachable without sacrificing the structure needed to turn input into real project decisions."
   }
@@ -417,7 +705,7 @@ Object.entries(otherNeeds).forEach(([tag, tools]) => {
   pill.addEventListener('click', () => {
     document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
     pill.classList.add('active');
-    needsList.innerHTML = '<strong>' + tag + '</strong> &mdash; ' + tools.join(', ');
+    needsList.innerHTML = '<strong>' + tag + '</strong>: ' + tools.join(', ');
   });
   pillContainer.appendChild(pill);
 });
@@ -448,6 +736,7 @@ const grid = document.getElementById('productGrid');
 products.forEach(p => {
   const card = document.createElement('div');
   card.className = 'flip-card';
+  card.dataset.name = p.name;
   card.innerHTML = `
     <div class="flip-inner">
       <div class="flip-front">
@@ -460,11 +749,13 @@ products.forEach(p => {
 });
 
 // ---------- Bubble chart ----------
-const ramp = ['#7F77DD','#1D9E75','#D85A30','#D4537E','#378ADD','#BA7517','#639922','#5DCAA5','#F0997B','#85B7EB','#AFA9EC','#9FE1CB','#F5C4B3','#ED93B1','#CECBF6','#FAC775','#C0DD97','#B5D4F4','#3C3489','#085041'];
+const ramp = ['#8c99c1','#a88cad','#b78e8e','#ad9b7f','#999e72','#7fad96','#a0aadb','#c4a8d4','#d4a8a8','#c4b898','#b8bc90','#9ac4b0','#7888c8','#b878d8','#e09060','#a8c860','#d4b050','#e06080'];
 
 const participationTools = {"Idea Generation": ["CitizenOS", "CoUrbanize", "Decidim", "Maptionnaire", "SuperBarrio"], "Playful Exploration": ["Build: The Place Game", "SuperBarrio", "UrbanistAI", "What We Cherish"], "Participatory Budgeting": ["CoUrbanize", "Decidim", "Maptionnaire", "Social Pinpoint"], "Polls": ["CitizenOS", "CoUrbanize", "Maptionnaire", "Polis"], "Co-Design": ["Build: The Place Game", "InCitu", "SuperBarrio", "UrbanistAI"], "Community Dialogue": ["Build: The Place Game", "CitizenOS", "Cortico", "UrbanistAI"], "Automated Sensemaking": ["CoUrbanize", "Cortico", "UrbanistAI"], "Discussion Forums": ["CoUrbanize", "PlaceSpeak", "Social Pinpoint"], "Surveys": ["CitizenOS", "CoUrbanize", "Polis"], "Crowdsourcing": ["CitizenOS", "Decidim", "Social Pinpoint"], "Audio Storytelling": ["Cortico", "What We Cherish"], "Civic Learning": ["Build: The Place Game", "SuperBarrio"], "Design Comparison": ["InCitu", "Social Pinpoint"], "Design Feedback": ["InCitu", "PlaceSpeak"], "Community Building": ["CitizenOS", "PlaceSpeak"], "Information Sharing": ["CitiBot", "PlaceSpeak"], "Mapping": ["Maptionnaire", "Social Pinpoint"], "Public Commenting": ["Decidim", "Polis"], "Web-Based Participation": ["What We Cherish"], "Text/Voicemail Submissions": ["CoUrbanize"]};
 
 const bData = Object.entries(participationTools).map(([name,tools],i)=>({name, val: tools.length, tools, color: ramp[i % ramp.length]}));
+
+const participationTagTools = {"Audio Storytelling": ["What We Cherish", "Cortico"], "Playful Exploration": ["What We Cherish", "Build: The Place Game", "SuperBarrio", "UrbanistAI"], "Web-Based Participation": ["What We Cherish"], "Automated Sensemaking": ["CoUrbanize", "Cortico", "UrbanistAI"], "Discussion Forums": ["CoUrbanize", "PlaceSpeak", "Social Pinpoint"], "Idea Generation": ["CoUrbanize", "Maptionnaire", "SuperBarrio", "CitizenOS", "Decidim"], "Participatory Budgeting": ["CoUrbanize", "Maptionnaire", "Decidim", "Social Pinpoint"], "Polls": ["CoUrbanize", "Maptionnaire", "Polis", "CitizenOS"], "Surveys": ["CoUrbanize", "Polis", "CitizenOS"], "Text/Voicemail Submissions": ["CoUrbanize"], "Civic Learning": ["Build: The Place Game", "SuperBarrio"], "Co-Design": ["Build: The Place Game", "InCitu", "SuperBarrio", "UrbanistAI"], "Community Dialogue": ["Build: The Place Game", "CitizenOS", "Cortico", "UrbanistAI"], "Youth Capacity Building": ["Build: The Place Game"], "Design Comparison": ["InCitu", "Social Pinpoint"], "Design Feedback": ["InCitu", "PlaceSpeak"], "Community Building": ["PlaceSpeak", "CitizenOS"], "Information Sharing": ["PlaceSpeak", "CitiBot"], "Mapping": ["Maptionnaire", "Social Pinpoint"], "Resource Allocation": ["Maptionnaire"], "Public Commenting": ["Polis", "Decidim"], "Evaluation": ["Vaki Radar"], "Issue Detection": ["Vaki Talk"], "Passive Listening": ["Vaki Talk"], "Service Requests": ["CitiBot"], "Consultation": ["CitizenOS"], "Crowdsourcing": ["CitizenOS", "Decidim", "Social Pinpoint"], "Conflict Resolution": ["Cortico"], "Narrative Collection": ["Cortico"], "Voice Amplification": ["Cortico"], "Public Accountability": ["Decidim"], "Immersion": ["UrbanistAI"], "Prioritization": ["UrbanistAI"], "Engagement Hub": ["Social Point"]};
 
 function renderBubbles() {
   const container = document.getElementById('bubbles');
@@ -519,14 +810,34 @@ function renderBubbles() {
 
   const list = document.getElementById('bubbleToolList');
 
+  function highlightCards(tagName) {
+    const matched = participationTagTools[tagName] || [];
+    document.querySelectorAll('.flip-card').forEach(card => {
+      card.classList.remove('highlighted', 'dimmed');
+      if (matched.includes(card.dataset.name)) {
+        card.classList.add('highlighted');
+      } else {
+        card.classList.add('dimmed');
+      }
+    });
+  }
+
+  function resetCards() {
+    document.querySelectorAll('.flip-card').forEach(card => {
+      card.classList.remove('highlighted', 'dimmed');
+    });
+  }
+
   g.on('mouseenter', function(event, d) {
     d3.select(this).select('circle').attr('stroke-width', 4);
-    list.innerHTML = '<strong>' + d.data.name + '</strong> &mdash; ' + d.data.tools.join(', ');
+    list.innerHTML = '<strong>' + d.data.name + '</strong>: ' + d.data.tools.join(', ');
+    highlightCards(d.data.name);
   });
 
   g.on('mouseleave', function(event, d) {
     d3.select(this).select('circle').attr('stroke-width', 2);
     list.innerHTML = 'Hover a bubble to see which tools use that participation style.';
+    resetCards();
   });
 }
 
@@ -564,7 +875,7 @@ new Chart(ctx, {
         const idx = elements[0].index;
         const ucName = labels[idx];
         const tools = useCaseTools[ucName];
-        list.innerHTML = '<strong>' + ucName + '</strong> &mdash; ' + tools.join(', ');
+        list.innerHTML = '<strong>' + ucName + '</strong>: ' + tools.join(', ');
       } else {
         list.innerHTML = 'Hover a bar to see which tools cover that use case.';
       }
