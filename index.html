@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Engagement Tech — Theme Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
@@ -17,11 +20,40 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-family: 'Figtree', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
-    padding: 2rem 1.5rem 4rem;
   }
+
+  /* ---- Tab nav ---- */
+  .tab-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    padding: 0 2rem;
+    gap: 0;
+  }
+  .tab-btn {
+    padding: 1rem 1.5rem;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: #607cff; border-bottom-color: #607cff; }
+
+  /* ---- Tab panels ---- */
+  .tab-panel { display: none; padding: 2rem 1.5rem 4rem; }
+  .tab-panel.active { display: block; }
   .wrap { max-width: 900px; margin: 0 auto; }
   h1 { font-size: 24px; font-weight: 600; margin: 0 0 0.25rem; }
   .subtitle { color: var(--text-secondary); font-size: 14px; margin: 0 0 2.5rem; }
@@ -459,6 +491,14 @@
 </style>
 </head>
 <body>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('schedule')">Internship Schedule</button>
+  <button class="tab-btn" onclick="switchTab('market')">Market Research</button>
+  <button class="tab-btn" onclick="switchTab('projects')">Internal Projects</button>
+</nav>
+
+<div class="tab-panel" id="tab-market">
 <div class="wrap">
   <div class="hero">
     <p class="hero-eyebrow">Market landscape research</p>
@@ -595,6 +635,84 @@
 
   <footer>Built from a market research database of 18 community engagement tools. 2025.</footer>
 </div>
+</div><!-- end tab-market -->
+
+<div class="tab-panel active" id="tab-schedule">
+<div class="wrap">
+  <div class="hero">
+    <p class="hero-eyebrow">Summer 2026</p>
+    <h1>Internship schedule</h1>
+    <p class="hero-sub">An orientation week followed by 12 weeks across four phases: external landscape research, internal discovery, focused deep dives, and opportunity definition through to final handoff.</p>
+  </div>
+
+  <div id="timeline"></div>
+</div>
+</div><!-- end tab-schedule -->
+
+<div class="tab-panel" id="tab-projects">
+<div class="wrap">
+  <div class="hero">
+    <p class="hero-eyebrow">Internal database</p>
+    <h1>Internal projects</h1>
+    <p class="hero-sub">Eight Sasaki projects, each with its own engagement workflow. Steps shaded in color involved direct community or stakeholder engagement; the rest were internal analysis and design work.</p>
+    <div class="stats-row">
+      <div class="stat-block">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Projects reviewed</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num" id="projAvgSteps">-</div>
+        <div class="stat-label">Average workflow steps</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num" id="projAvgEngagePct">-</div>
+        <div class="stat-label">Average share of steps with engagement</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Project types</div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Across the workflows</h2>
+    <p class="section-desc">Patterns in how and when engagement actually happened, beyond just whether it did.</p>
+
+    <div class="tension-block" style="margin-bottom: 1.4rem;">
+      <p class="tension-quote" style="font-size: 19px;">Engagement woven throughout builds trust. Engagement front-loaded does not.</p>
+      <p class="tension-sub">Projects like Aurora Parks and Plan Baton Rouge III return to the community again and again, at almost every stage, so input feeds forward into decisions and decisions feed back to the community. Other projects, like Universidad de Lima and Rice's campus framework, engage early and then disappear into internal analysis for the rest of the process. Both can produce a good plan, but only the first kind builds an ongoing feedback loop and a sense of shared ownership.</p>
+    </div>
+
+    <div class="spotlight-grid">
+      <div class="spotlight-card">
+        <div class="spotlight-tag">Transparency about input</div>
+        <p class="spotlight-text">Phillips Square stands out for stating, almost step by step, how community input shaped the design: aspirations gathered through focus groups and pop-ups directly fed concept testing, and a community charrette directly shaped the final design refinements. The project's own key lesson names this explicitly: transparency about how feedback shaped decisions increased trust. Rice's campus framework plan, by contrast, gathers listening and leadership input early, but its remaining steps (working sessions, growth scenarios, guiding principles) read as internal work with no stated link back to what was heard. The plan may well reflect that input, but the workflow itself does not show it.</p>
+        <div class="spotlight-tools" data-tools="City of Boston Phillips Square Design, Rice University Campus Framework Plan"></div>
+      </div>
+      <div class="spotlight-card">
+        <div class="spotlight-tag">Engagement at nearly every stage</div>
+        <p class="spotlight-text">Aurora Parks Plan and Plan Baton Rouge III both return to the community repeatedly rather than once. Aurora alternates outreach, pop-ups, interviews, and two separate survey phases between internal analysis steps, while Baton Rouge pairs almost every internal step with a corresponding engagement activity. This rhythm is what creates a feedback loop: community input doesn't just open the process, it continues to shape it as the plan develops.</p>
+        <div class="spotlight-tools" data-tools="Aurora Parks Plan, Plan Baton Rouge III"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Project summaries</h2>
+    <p class="section-desc">Click a project to expand its workflow, design impact, and key lessons.</p>
+    <div id="projectList"></div>
+  </section>
+
+  <section>
+    <h2>The feedback loop</h2>
+    <p class="section-desc">Trust builds through reciprocity: each side listens, then responds.</p>
+    <div class="chart-card" style="display:flex; flex-direction:column; align-items:center; padding: 2rem 1.5rem;">
+      <div id="reciprocityLoop" style="display:flex; flex-direction:column; align-items:center; width:100%;"></div>
+    </div>
+  </section>
+</div>
+</div><!-- end tab-projects -->
 
 <script>
 const participation = {"Idea Generation": 5, "Playful Exploration": 4, "Participatory Budgeting": 4, "Polls": 4, "Co-Design": 4, "Community Dialogue": 4, "Automated Sensemaking": 3, "Discussion Forums": 3, "Surveys": 3, "Crowdsourcing": 3, "Audio Storytelling": 2, "Civic Learning": 2, "Design Comparison": 2, "Design Feedback": 2, "Community Building": 2, "Information Sharing": 2, "Mapping": 2, "Public Commenting": 2, "Web-Based Participation": 1, "Text/Voicemail Submissions": 1, "Youth Capacity Building": 1, "Resource Allocation": 1, "Evaluation": 1, "Issue Detection": 1, "Passive Listening": 1};
@@ -611,7 +729,637 @@ const useCaseTools = {
 "Prioritizing among goals": ["CitizenOS","Maptionnaire","Polis","Social Pinpoint","Social Point","Vaki Radar"]
 };
 
-// ---------- Exclusion risks ----------
+// ---- Tab switching ----
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ---- Internship Schedule ----
+const phases = {
+  'Orientation and Immersion': { color: '#999e72', light: '#F0F1E6' },
+  'External Landscape': { color: '#8c99c1', light: '#E8ECFF' },
+  'Internal Discovery':  { color: '#7fad96', light: '#E4F2EC' },
+  'Focused Deep Dives':  { color: '#a88cad', light: '#F2E8F5' },
+  'Opportunity and Product Definition': { color: '#ad9b7f', light: '#F5F0E8' },
+  'Refinement and Handoff': { color: '#b78e8e', light: '#F5EBEB' },
+};
+
+const weeks = [
+  {
+    week: 0, phase: 'Orientation and Immersion',
+    title: 'Onboarding & project intro',
+    dates: 'June 1 – 5, 2026',
+    goals: [
+      'Get to know Sasaki and the Strategies team',
+      'Project introduction',
+      'Develop a workplan'
+    ],
+    outputs: ['Week to week workplan']
+  },
+  {
+    week: 1, phase: 'External Landscape',
+    title: 'Civic tech landscape scan',
+    dates: 'June 8 – 12, 2026',
+    goals: [
+      'Continue populating civic tech landscape database with each product reviewed',
+      'Organize products into categories and identify recurring engagement patterns and workflows',
+      'Start synthesizing key themes, trends, and gaps into a landscape map',
+      'Figure out if I can shadow a Sasaki project currently using community engagement',
+      'Start thinking about people to interview and draft interview questions'
+    ],
+    outputs: ['Civic tech product database V1', 'Critical analysis notes for each product', 'Initial list of patterns, standout tools, and observations', 'Draft stakeholder interview list']
+  },
+  {
+    week: 2, phase: 'Internal Discovery',
+    title: 'How Sasaki does engagement today',
+    dates: 'June 15 – 19, 2026',
+    goals: [
+      'Do a thorough audit of CoMap, Collaboration, Table UI, Dashi',
+      'Document all engagement tools and methods used across teams',
+      'Note what happens with data and input after it has been collected, how it flows into decisions and deliverables',
+      'Form questions about friction points to explore in interviews'
+    ],
+    outputs: ['Current workflow diagrams', 'Inventory of tools and methods in use (using template)', 'List of observations and early friction points', 'Draft interview questions']
+  },
+  {
+    week: 3, phase: 'External Landscape',
+    title: 'Landscape synthesis',
+    dates: 'June 22 – 26, 2026',
+    goals: [
+      'Group all documented tools into a product taxonomy: by type, audience, engagement stage, and methodology',
+      'Extract and map different engagement workflows seen across products',
+      'Identify biggest gaps: what problems do none of these tools solve well?',
+      'Highlight emerging themes'
+    ],
+    outputs: ['Product taxonomy map', 'Engagement workflow library', 'Civic tech landscape report']
+  },
+  {
+    week: 4, phase: 'Internal Discovery',
+    title: 'Internal stakeholder interviews (in NYC)',
+    dates: 'June 29 – July 3, 2026',
+    goals: [
+      'Conduct 5 to 8 interviews across roles: planners, designers, researchers, strategists, project managers',
+      'Ask about engagement workflow: what tools they use, what they wish existed',
+      'Take detailed notes and flag quotes that represent recurring themes'
+    ],
+    outputs: ['Interview notes', 'Stakeholder map by role and project type', 'Running list of pain points and recurring needs']
+  },
+  {
+    week: 5, phase: 'Internal Discovery',
+    title: 'Market research synthesis and gap identification',
+    dates: 'July 6 – 10, 2026',
+    goals: [
+      'Synthesize interview notes, group themes, highlight patterns and contradictions',
+      'Create a structured needs inventory',
+      'Identify frequent pain points that cut across interviews and project types',
+      'Compare internal gaps with external landscape research'
+    ],
+    outputs: ['Pain points summary', 'Needs inventory by role', 'Internal gaps report', 'Cross-reference: external gaps vs internal needs']
+  },
+  {
+    week: 6, phase: 'Focused Deep Dives',
+    title: 'Deep-dive research on priority themes',
+    dates: 'July 13 – 19, 2026',
+    goals: [
+      'Pick most important themes that emerged in the research, group into buckets',
+      'For each theme, find strong precedent case studies to identify what is still unsolved',
+      'Research how similar organizations have tackled these themes',
+      'Update opportunity list based on learnings',
+      'Determine what gaps are most tractable and relevant to Sasaki, and what to solve for'
+    ],
+    outputs: ['Short brief for each theme summarizing landscape, best examples, and open questions', 'Updated opportunity list']
+  },
+  {
+    week: 7, phase: 'Opportunity and Product Definition',
+    title: 'Identify the strongest opportunity areas and begin making recommendations',
+    dates: 'July 20 – 24, 2026',
+    goals: [
+      'Build opportunity matrix: map external market gaps against internal Sasaki needs',
+      'Score and rank opportunities by urgency, feasibility, and differentiation from what exists',
+      'Pressure test opportunities with the team',
+      'Draft initial product recommendations with rationales'
+    ],
+    outputs: ['Opportunity matrix', 'Prioritized opportunity list', 'Initial recommendations summary']
+  },
+  {
+    week: 8, phase: 'Opportunity and Product Definition',
+    title: 'Get specific about who the product is for and what it needs to do',
+    dates: 'July 27 – 31, 2026',
+    goals: [
+      'Define user groups with context and needs',
+      'Draft problem statements',
+      'Prioritize problem statements',
+      'Refine with feedback',
+      'Write user stories'
+    ],
+    outputs: ['User groups with context and needs', 'What has to be done for each group', '3 to 4 problem statements', 'Prioritized focus for product concept']
+  },
+  {
+    week: 9, phase: 'Opportunity and Product Definition',
+    title: 'Generate and evaluate product concepts',
+    dates: 'August 3 – 7, 2026',
+    goals: [
+      'Generate 3 to 5 different product concepts',
+      'Describe what each does, who it is for, how it works at a high level, and what makes it differentiated',
+      'Define 4 to 6 product principles that should guide any concept',
+      'Evaluate concepts against user needs',
+      'Select recommended direction'
+    ],
+    outputs: ['3 to 5 product concept descriptions', 'Product principles (4 to 6)', 'Concept evaluation matrix', 'Recommended direction brief']
+  },
+  {
+    week: 10, phase: 'Opportunity and Product Definition',
+    title: 'Build the product scaffold',
+    dates: 'August 10 – 14, 2026',
+    goals: [
+      'Map out 2 to 3 core user journeys through the product: what does each user type do from start to finish?',
+      'Build a feature map explaining what capabilities the product needs',
+      'Draft information architecture and product structure',
+      'Define MVP',
+      'Identify 2 to 3 biggest open questions that would need to be answered before anyone builds it'
+    ],
+    outputs: ['User journey maps', 'Feature map', 'Draft information architecture', 'MVP definition', 'Open questions list']
+  },
+  {
+    week: 11, phase: 'Refinement and Handoff',
+    title: 'Refine and package the concept',
+    dates: 'August 17 – 21, 2026',
+    goals: [
+      'Review product scaffold with team, identify what is missing',
+      'Refine user journeys, feature map, and MVP based on feedback',
+      'Sketch a basic implementation roadmap for phase 1 and 2 of building',
+      'Identify 3 to 5 future research questions or opportunities not fully explored',
+      'Draft presentation deck'
+    ],
+    outputs: ['Refined product framework', 'Implementation roadmap', 'Future opportunities list', 'Draft final presentation deck']
+  },
+  {
+    week: 12, phase: 'Refinement and Handoff',
+    title: 'Final presentation and handoff',
+    dates: 'August 24 – 28, 2026',
+    goals: [
+      'Finalize presentation deck, making sure the narrative is clear',
+      'Practice presentation and get feedback',
+      'Compile research artifacts into a clear handoff package the team can actually use',
+      'Reflect on the full arc of the internship and document personal takeaways'
+    ],
+    outputs: ['Final presentation deck', 'Research synthesis document', 'Product scaffold and roadmap', 'Handoff package for the team']
+  }
+];
+
+
+// Inject schedule CSS
+const scheduleStyle = document.createElement('style');
+scheduleStyle.textContent = `
+  #tab-schedule .hero { padding: 2.5rem 0 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .phase-group { margin-bottom: 2.5rem; }
+  .phase-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 99px;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  .week-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0;
+    margin-bottom: 2px;
+    cursor: pointer;
+  }
+  .week-gutter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 18px;
+  }
+  .week-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: white;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .week-row:hover .week-dot { transform: scale(1.3); }
+  .week-line {
+    width: 2px;
+    flex: 1;
+    min-height: 20px;
+    margin-top: 4px;
+  }
+  .week-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .week-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.9rem 1.1rem;
+  }
+  .week-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    width: 46px;
+  }
+  .week-title { font-size: 14px; font-weight: 600; flex: 1; }
+  .week-dates { font-size: 11.5px; color: var(--text-secondary); flex-shrink: 0; }
+  .week-chevron { font-size: 12px; color: var(--text-secondary); transition: transform 0.25s; flex-shrink: 0; }
+  .week-row.open .week-chevron { transform: rotate(90deg); }
+  .week-body {
+    display: none;
+    padding: 0 1.1rem 1.1rem;
+    border-top: 1px solid var(--border);
+  }
+  .week-row.open .week-body { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 1rem; }
+  .week-body h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin: 0 0 8px; font-weight: 600; }
+  .week-body ul { margin: 0; padding-left: 1.1rem; }
+  .week-body ul li { font-size: 12.5px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 3px; }
+
+`;
+document.head.appendChild(scheduleStyle);
+
+// Group by phase and render
+const timeline = document.getElementById('timeline');
+let currentPhase = null;
+let phaseDiv = null;
+
+weeks.forEach((w, i) => {
+  const ph = phases[w.phase];
+
+  if (w.phase !== currentPhase) {
+    phaseDiv = document.createElement('div');
+    phaseDiv.className = 'phase-group';
+    const label = document.createElement('div');
+    label.className = 'phase-label';
+    label.textContent = w.phase;
+    label.style.background = ph.light;
+    label.style.color = ph.color;
+    phaseDiv.appendChild(label);
+    timeline.appendChild(phaseDiv);
+    currentPhase = w.phase;
+  }
+
+  const row = document.createElement('div');
+  row.className = 'week-row';
+
+  const isLast = (i === weeks.length - 1) || (weeks[i+1].phase !== w.phase);
+
+  row.innerHTML = `
+    <div class="week-gutter">
+      <div class="week-dot" style="border-color:${ph.color}; background:${ph.light}"></div>
+      ${!isLast ? `<div class="week-line" style="background:${ph.color}30"></div>` : ''}
+    </div>
+    <div>
+      <div class="week-card">
+        <div class="week-header">
+          <div class="week-num">Week ${w.week}</div>
+          <div class="week-title">${w.title}</div>
+          <div class="week-dates">${w.dates}</div>
+          <div class="week-chevron">▶</div>
+        </div>
+        <div class="week-body">
+          <div>
+            <h4>Goals</h4>
+            <ul>${w.goals.map(g => `<li>${g}</li>`).join('')}</ul>
+          </div>
+          <div>
+            <h4>Outputs</h4>
+            <ul>${w.outputs.map(o => `<li>${o}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  row.addEventListener('click', () => row.classList.toggle('open'));
+  phaseDiv.appendChild(row);
+});
+
+// ---- Internal Projects ----
+const projectsData = [{"name": "Plan Baton Rouge III", "location": "Baton Rouge, Louisiana", "type": "Master Plan", "metrics": ["2,500 survey responses", "600+ public meeting attendees", "20+ stakeholder/focus group meetings", "3 public meetings", "4 pop-up events"], "stakeholders": ["Arts and Culture Organizations", "Community Leaders", "Developers", "Institutions", "Local Businesses", "Public Agencies", "Residents"], "lessons": "Multi-channel engagement (digital, in person, advisory groups) increases participation and builds local ownership. A continuous feedback loop lets implementation lessons inform future decisions.", "steps": [{"text": "Stakeholder Alignment", "type": "engagement"}, {"text": "Existing Conditions Analysis", "type": "internal"}, {"text": "Focus Groups + Stakeholder Interviews", "type": "engagement"}, {"text": "Public Events + Pop-Ups", "type": "engagement"}, {"text": "Digital Surveys + Website", "type": "engagement"}, {"text": "Vision Development", "type": "internal"}, {"text": "Concept Testing", "type": "engagement"}, {"text": "Recommendation Refinement", "type": "internal"}, {"text": "Final Plan + Implementation Strategy", "type": "internal"}]}, {"name": "Akron Innerbelt Master Plan", "location": "Innerbelt, Ohio", "type": "Master Plan", "metrics": ["900+ community interactions", "600+ open house participants", "4 large community gatherings", "15+ small group discussions", "40+ partner conversations", "72 coordination meetings"], "stakeholders": ["City Agencies", "Community Leaders", "Local Businesses", "Neighborhood Organizations", "Non Profits", "Residents"], "lessons": "Long-term repair requires combining physical improvements with social programs, centering historically harmed communities, and maintaining community governance throughout implementation.", "steps": [{"text": "Historical Acknowledgment and Listening", "type": "engagement"}, {"text": "Level Setting", "type": "internal"}, {"text": "Goals and Ideas Generation", "type": "engagement"}, {"text": "Synthesis of Community Input", "type": "internal"}, {"text": "Community Led Refinement", "type": "engagement"}, {"text": "Implementation Governance", "type": "internal"}]}, {"name": "Rice University Campus Framework Plan", "location": "Houston, Texas", "type": "Campus Master Plan", "metrics": ["No counts reported"], "stakeholders": ["Academic Departments", "Campus Visionaries", "Faculty", "Senior Administration", "Sustainability Staff"], "lessons": "Early stakeholder alignment helps connect long-term physical planning with institutional goals, sustainability objectives, and future growth needs.", "steps": [{"text": "Research and Analysis", "type": "internal"}, {"text": "Listening Sessions", "type": "engagement"}, {"text": "Leadership Engagement", "type": "engagement"}, {"text": "Technical Workshops", "type": "engagement"}, {"text": "Working Sessions", "type": "internal"}, {"text": "Develop Growth Scenarios", "type": "internal"}, {"text": "Refine", "type": "internal"}, {"text": "Establish Guiding Principles", "type": "internal"}]}, {"name": "Berklee Campus Plan", "location": "Boston, MA", "type": "Campus Master Plan", "metrics": ["242 survey responses", "3,135 map markers placed", "880+ stickers placed"], "stakeholders": ["Campus Community Members", "Faculty", "Students"], "lessons": "Interactive and place-based engagement revealed both physical space needs and emotional connections to specific campus locations.", "steps": [{"text": "Launch Online Survey", "type": "engagement"}, {"text": "Conduct In-Person Engagements", "type": "engagement"}, {"text": "Map Campus Experiences", "type": "engagement"}, {"text": "Collect Qualitative Feedback", "type": "engagement"}, {"text": "Prioritize Planning Principles", "type": "internal"}, {"text": "Assess Future Space Needs", "type": "internal"}, {"text": "Draft Campus Vision", "type": "internal"}, {"text": "Gather Feedback", "type": "engagement"}]}, {"name": "Aurora Parks Plan", "location": "Aurora, CO", "type": "Landscape", "metrics": ["1,500+ survey responses", "1,000+ location-based comments", "18 in person events/pop-ups", "17,000 community touchpoints"], "stakeholders": ["Advisory Boards", "City Staff", "Immigrants and Refugees", "Older Adults", "Public Agencies", "Residents", "Youth"], "lessons": "Equity-focused engagement helps identify barriers to access, prioritize underserved neighborhoods, and align investments with community needs. Public engagement happened in every phase.", "steps": [{"text": "Existing Conditions Analysis", "type": "internal"}, {"text": "Phase 1 Survey and Outreach", "type": "engagement"}, {"text": "Pop-Ups", "type": "engagement"}, {"text": "Location-Based Engagement", "type": "engagement"}, {"text": "Stakeholder Interviews + Focus Groups", "type": "engagement"}, {"text": "Development of Guiding Principles and Strategies", "type": "internal"}, {"text": "Gap and Needs Analysis", "type": "internal"}, {"text": "Phase 2 Survey", "type": "engagement"}, {"text": "Community Led Refinement of Recommendations", "type": "engagement"}]}, {"name": "Universidad de Lima", "location": "Lima, Peru", "type": "Campus Master Plan", "metrics": ["92 administrative staff", "35 academic authorities", "100 faculty members"], "stakeholders": ["Academic Departments", "Faculty", "Professors", "Students", "University Leadership"], "lessons": "Existing collaboration networks were already strong; spatial planning should reinforce successful interdisciplinary relationships while using campus design to encourage future collaboration.", "steps": [{"text": "Leadership Visioning + Interviews", "type": "engagement"}, {"text": "Planning Committee and User Group Formation", "type": "internal"}, {"text": "Existing Conditions", "type": "internal"}, {"text": "Collaboration Survey", "type": "engagement"}, {"text": "Capacity and Growth Analysis", "type": "internal"}, {"text": "Concept Development", "type": "internal"}, {"text": "Long-Term Implementation Planning", "type": "internal"}]}, {"name": "City of Boston Phillips Square Design", "location": "Boston, MA", "type": "Public Plaza", "metrics": ["250+ survey and engagement responses", "8 focus groups", "100+ focus group participants", "Engagement across youth, elders, businesses, residents and visitors"], "stakeholders": ["Artists", "Chinatown Residents", "Local Businesses", "Schools", "University Leadership", "Youth"], "lessons": "Successful engagement required language justice, meeting people where they already gather, reducing engagement fatigue, integrating designers directly into engagement activities, and maintaining transparency about how feedback shaped design decisions. Multilingual, culturally responsive engagement significantly increased participation and trust.", "steps": [{"text": "Stakeholder Mapping", "type": "internal"}, {"text": "Understand Community Aspirations via Focus Groups, Pop-Ups, Surveys", "type": "engagement"}, {"text": "Synthesis into Design Alternatives", "type": "internal"}, {"text": "Concept Testing with Open House and Survey 2", "type": "engagement"}, {"text": "Collaborative Design Refinements via Community Charrette", "type": "engagement"}, {"text": "Final Design Selection", "type": "internal"}, {"text": "Community Validation and Celebration", "type": "engagement"}, {"text": "Implementation", "type": "internal"}]}, {"name": "Pilgrim 1600 Acre Area Plan", "location": "Plymouth, MA", "type": "Area Plan", "metrics": ["Public online survey", "Multiple public forums", "Public visioning session", "Public open house", "Stakeholder interview series", "Project website and four public media releases"], "stakeholders": ["Elected Officials", "Environmental Advocates", "Landowner", "Local Businesses", "Non-profits", "Residents"], "lessons": "Planning large post-industrial sites requires balancing economic development, housing needs, fiscal resilience, and environmental conservation simultaneously. Early visioning and stakeholder interviews establish community priorities before design concepts are created.", "steps": [{"text": "Existing Conditions, Stakeholder Interviews, and Initial Survey", "type": "engagement"}, {"text": "Community Visioning and Analysis of Survey Feedback", "type": "engagement"}, {"text": "Concept Development", "type": "internal"}, {"text": "Concept Testing with Open House and Community Feedback", "type": "engagement"}, {"text": "Feedback Incorporated into Recommendations", "type": "internal"}, {"text": "Final Plan Development", "type": "internal"}]}];
+
+// Inject project styles
+const projectStyle = document.createElement('style');
+projectStyle.textContent = `
+  #tab-projects .hero { padding: 2.5rem 0 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .proj-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .proj-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+  }
+  .proj-type-badge {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 99px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .proj-title-wrap { flex: 1; min-width: 0; }
+  .proj-title { font-size: 14.5px; font-weight: 600; }
+  .proj-location { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .proj-engage-frac { font-size: 11.5px; color: var(--text-secondary); flex-shrink: 0; white-space: nowrap; }
+  .proj-chevron { font-size: 12px; color: var(--text-secondary); transition: transform 0.25s; flex-shrink: 0; }
+  .proj-card.open .proj-chevron { transform: rotate(90deg); }
+  .proj-body { display: none; padding: 0 1.25rem 1.4rem; border-top: 1px solid var(--border); }
+  .proj-card.open .proj-body { display: block; padding-top: 1.25rem; }
+  .proj-flow-wrap { margin-bottom: 1.4rem; overflow-x: auto; position: relative; padding-bottom: 4px; }
+  .flow-tip {
+    display: none;
+    margin-top: 10px;
+    background: #F7F8FF;
+    border: 1px solid #D0D5F5;
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    animation: flowTipIn 0.2s ease;
+  }
+  @keyframes flowTipIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .flow-tip-badge {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 99px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .flow-tip-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .proj-legend { display: flex; gap: 16px; margin-bottom: 10px; font-size: 11.5px; color: var(--text-secondary); }
+  .proj-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .proj-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.25rem; }
+  .proj-details-grid h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin: 0 0 8px; font-weight: 600; }
+  .proj-details-grid p { font-size: 12.5px; line-height: 1.6; color: var(--text-secondary); margin: 0; }
+  .proj-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .proj-pill { font-size: 11px; padding: 3px 9px; border-radius: 99px; background: #F2F4FF; color: #5A607A; border: 1px solid var(--border); }
+  .proj-metrics-list { margin: 0; padding-left: 1.1rem; }
+  .proj-metrics-list li { font-size: 12px; line-height: 1.6; color: var(--text-secondary); }
+`;
+document.head.appendChild(projectStyle);
+
+const typeColors = {
+  'Master Plan': { color: '#607cff', light: '#E8ECFF' },
+  'Campus Master Plan': { color: '#a88cad', light: '#F2E8F5' },
+  'Landscape': { color: '#7fad96', light: '#E4F2EC' },
+  'Public Plaza': { color: '#b78e8e', light: '#F5EBEB' },
+  'Area Plan': { color: '#ad9b7f', light: '#F5F0E8' }
+};
+
+function buildFlowSVG(steps, projectIdx) {
+  const n = steps.length;
+  const nodeR = 30;
+  const stepGap = 108;
+  const padX = 50;
+  const totalW = padX * 2 + (n - 1) * stepGap;
+  const baseY = 130;
+  const peakOffset = 52;
+  const svgH = 230;
+
+  const positions = steps.map((s, i) => {
+    const x = padX + i * stepGap;
+    const y = s.type === 'engagement' ? baseY - peakOffset : baseY + peakOffset * 0.45;
+    return { x, y };
+  });
+
+  let svg = `<svg viewBox="0 0 ${totalW} ${svgH}" width="${totalW}" height="${svgH}" style="display:block; overflow:visible;">`;
+
+  // flowing connector path through all points
+  let pathD = `M${positions[0].x},${positions[0].y}`;
+  for (let i = 1; i < n; i++) {
+    const prev = positions[i-1], cur = positions[i];
+    const midX = (prev.x + cur.x) / 2;
+    pathD += ` C${midX},${prev.y} ${midX},${cur.y} ${cur.x},${cur.y}`;
+  }
+  svg += `<path d="${pathD}" stroke="#C5CAE8" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+
+  // animated flow dot traveling along the path
+  svg += `<circle r="4" fill="#607cff"><animateMotion dur="${n * 1.1}s" repeatCount="indefinite" path="${pathD}"/></circle>`;
+
+  steps.forEach((s, i) => {
+    const { x, y } = positions[i];
+    const isEngage = s.type === 'engagement';
+    const fill = isEngage ? '#607cff' : '#EFF1FB';
+    const strokeColor = isEngage ? '#4A5FE0' : '#C5CAE8';
+    const textColor = isEngage ? '#FFFFFF' : '#5A607A';
+
+    svg += `<g class="flow-node" data-pidx="${projectIdx}" data-sidx="${i}" style="cursor:pointer;" onmouseenter="this.querySelector('circle').setAttribute('r','${nodeR+4}')" onmouseleave="this.querySelector('circle').setAttribute('r','${nodeR}')" onclick="toggleFlowTip(this, ${projectIdx}, ${i})">`;
+    svg += `<circle cx="${x}" cy="${y}" r="${nodeR}" fill="${fill}" stroke="${strokeColor}" stroke-width="2" style="transition: r 0.18s ease;"/>`;
+    svg += `<text x="${x}" y="${y+1}" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="600" fill="${textColor}">${i+1}</text>`;
+    svg += `</g>`;
+
+    // step label below/above node depending on position
+    const labelY = isEngage ? y - nodeR - 12 : y + nodeR + 18;
+    const words = s.text.split(' ');
+    let lines = [];
+    let cur = '';
+    words.forEach(w => {
+      const test = cur ? cur + ' ' + w : w;
+      if (test.length > 16) {
+        lines.push(cur);
+        cur = w;
+      } else {
+        cur = test;
+      }
+    });
+    if (cur) lines.push(cur);
+    lines = lines.slice(0, 2);
+    const lh = 12;
+    lines.forEach((line, li) => {
+      const ly = isEngage ? labelY - (lines.length - 1 - li) * lh : labelY + li * lh;
+      svg += `<text x="${x}" y="${ly}" text-anchor="middle" font-size="10.5" font-weight="500" fill="#3A4060">${line}</text>`;
+    });
+  });
+
+  svg += `</svg>`;
+  return svg;
+}
+
+function toggleFlowTip(el, pIdx, sIdx) {
+  const p = projectsData[pIdx];
+  const step = p.steps[sIdx];
+  const existing = el.parentElement.parentElement.querySelector('.flow-tip-active');
+  if (existing) existing.remove();
+  const wrap = el.closest('.proj-flow-wrap');
+  let tip = wrap.querySelector('.flow-tip');
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.className = 'flow-tip';
+    wrap.appendChild(tip);
+  }
+  const isEngage = step.type === 'engagement';
+  tip.innerHTML = `<span class="flow-tip-badge" style="background:${isEngage ? '#E8ECFF' : '#F0F1F8'}; color:${isEngage ? '#3A57E8' : '#5A607A'}">${isEngage ? 'Community / stakeholder engagement' : 'Internal analysis / design work'}</span><div class="flow-tip-text">Step ${sIdx+1}: ${step.text}</div>`;
+  tip.style.display = 'block';
+}
+
+const projectList = document.getElementById('projectList');
+let totalSteps = 0, totalEngagePct = 0;
+
+projectsData.forEach((p, pIdx) => {
+  const tc = typeColors[p.type] || { color: '#8c99c1', light: '#E8ECFF' };
+  const engageCount = p.steps.filter(s => s.type === 'engagement').length;
+  const engagePct = Math.round((engageCount / p.steps.length) * 100);
+  totalSteps += p.steps.length;
+  totalEngagePct += engagePct;
+
+  const card = document.createElement('div');
+  card.className = 'proj-card';
+  card.innerHTML = `
+    <div class="proj-header">
+      <span class="proj-type-badge" style="background:${tc.light}; color:${tc.color}">${p.type || 'Project'}</span>
+      <div class="proj-title-wrap">
+        <div class="proj-title">${p.name}</div>
+        <div class="proj-location">${p.location}</div>
+      </div>
+      <div class="proj-engage-frac">${engageCount} of ${p.steps.length} steps engaged</div>
+      <div class="proj-chevron">▶</div>
+    </div>
+    <div class="proj-body">
+      <div class="proj-legend">
+        <span><span class="legend-dot" style="background:#607cff"></span>Community / stakeholder engagement</span>
+        <span><span class="legend-dot" style="background:#E2E5F5; border:1px solid #C5CAE8"></span>Internal analysis / design work</span>
+        <span style="color: var(--text-secondary); font-style: italic;">Click a step for detail</span>
+      </div>
+      <div class="proj-flow-wrap">${buildFlowSVG(p.steps, pIdx)}</div>
+      <div class="proj-details-grid">
+        <div>
+          <h4>Key lessons</h4>
+          <p>${p.lessons}</p>
+        </div>
+        <div>
+          <h4>Target stakeholders</h4>
+          <div class="proj-pills">${p.stakeholders.map(s => `<span class="proj-pill">${s}</span>`).join('')}</div>
+        </div>
+        <div>
+          <h4>Participation metrics</h4>
+          <ul class="proj-metrics-list">${p.metrics.map(m => `<li>${m}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>`;
+
+  card.querySelector('.proj-header').addEventListener('click', () => card.classList.toggle('open'));
+  projectList.appendChild(card);
+});
+
+document.getElementById('projAvgSteps').textContent = Math.round(totalSteps / projectsData.length);
+document.getElementById('projAvgEngagePct').textContent = Math.round(totalEngagePct / projectsData.length) + '%';
+
+// ---- Reciprocity feedback loop diagram ----
+(function renderReciprocityLoop() {
+  const container = document.getElementById('reciprocityLoop');
+  const W = 460, H = 420;
+  const cx = W / 2, cy = H / 2;
+  const R = 130;
+  const duration = 7000;
+
+  const communitySteps = [
+    { angle: 220, label: 'Shares' },
+    { angle: 140, label: 'Responds' }
+  ];
+  const teamSteps = [
+    { angle: 40,  label: 'Listens' },
+    { angle: 320, label: 'Responds' }
+  ];
+
+  function polar(angleDeg, radius) {
+    const rad = (angleDeg - 90) * Math.PI / 180;
+    return { x: cx + radius * Math.cos(rad), y: cy + radius * Math.sin(rad) };
+  }
+
+  function arcPath(a1, a2, radius) {
+    const p1 = polar(a1, radius), p2 = polar(a2, radius);
+    return `M${p1.x},${p1.y} A${radius},${radius} 0 0 1 ${p2.x},${p2.y}`;
+  }
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="${Math.min(W,460)}" style="display:block; max-width:100%; overflow:visible;">`;
+
+  svg += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#E2E5F5" stroke-width="2"/>`;
+
+  svg += `<path d="${arcPath(90, 270, R)}" fill="none" stroke="#A88CAD" stroke-width="5" stroke-linecap="round" opacity="0.85"/>`;
+  svg += `<path d="${arcPath(270, 90, R)}" fill="none" stroke="#607cff" stroke-width="5" stroke-linecap="round" opacity="0.85"/>`;
+
+  [...communitySteps, ...teamSteps].forEach(s => {
+    const isComm = communitySteps.includes(s);
+    const p = polar(s.angle, R);
+    const color = isComm ? '#A88CAD' : '#607cff';
+    const lightColor = isComm ? '#F2E8F5' : '#E8ECFF';
+    svg += `<circle cx="${p.x}" cy="${p.y}" r="9" fill="${lightColor}" stroke="${color}" stroke-width="2"/>`;
+
+    const labelP = polar(s.angle, R + 38);
+    const anchor = labelP.x < cx - 10 ? 'end' : (labelP.x > cx + 10 ? 'start' : 'middle');
+    svg += `<text x="${labelP.x}" y="${labelP.y + 4}" text-anchor="${anchor}" font-size="12" font-weight="600" fill="#2D3047">${s.label}</text>`;
+  });
+
+  svg += `<circle cx="${cx}" cy="${cy}" r="46" fill="#FFFFFF" stroke="#D0D5F5" stroke-width="1.5"/>`;
+  svg += `<text x="${cx}" y="${cy-4}" text-anchor="middle" font-size="13" font-weight="600" fill="#2D3047">Trust</text>`;
+  svg += `<text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="9.5" fill="#7A7F9A">builds with each loop</text>`;
+
+  svg += `<circle id="loopBall" r="6" fill="#3A57E8"/>`;
+
+  svg += `</svg>`;
+  svg += `<div id="loopDetail" style="margin: 14px auto 0; background: #F7F8FF; border: 1px solid #D0D5F5; border-radius: 10px; padding: 0.7rem 0.9rem; max-width: 360px; font-size: 12.5px; line-height: 1.5; color: var(--text); text-align: center; transition: background 0.3s, border-color 0.3s;"></div>`;
+
+  container.innerHTML = svg;
+
+  const ball = document.getElementById('loopBall');
+  const detail = document.getElementById('loopDetail');
+  const messages = {
+    team: { html: '<strong style="color:#4A5FE0;">Team:</strong> listens, then responds with something shaped by it.', bg: '#F7F8FF', border: '#D0D5F5' },
+    community: { html: '<strong style="color:#7A5C8F;">Community:</strong> shares input, then reacts to how it was used.', bg: '#FAF6FC', border: '#E5D5EC' }
+  };
+  let lastSide = null;
+
+  function setSide(side) {
+    if (side === lastSide) return;
+    lastSide = side;
+    const m = messages[side];
+    detail.innerHTML = m.html;
+    detail.style.background = m.bg;
+    detail.style.borderColor = m.border;
+  }
+
+  const start = performance.now();
+  function animate(now) {
+    const t = ((now - start) % duration) / duration;
+    const angle = t * 360;
+    const p = polar(angle, R);
+    ball.setAttribute('cx', p.x);
+    ball.setAttribute('cy', p.y);
+    const side = (angle >= 270 || angle < 90) ? 'team' : 'community';
+    setSide(side);
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
+
+
+
+// ---- Market research JS below ----
 const exclusionData = [
   {label: "Digital literacy", count: 12, tools: ["What We Cherish","InCitu","PlaceSpeak","Maptionnaire","Polis","CitiBot","SuperBarrio","CitizenOS","Decidim","Social Pinpoint","UrbanistAI","Social Point"]},
   {label: "Language barrier", count: 10, tools: ["Build: The Place Game","PlaceSpeak","Maptionnaire","Vaki Talk","SuperBarrio","Cortico","Decidim","Social Pinpoint","UrbanistAI","Social Point"]},
