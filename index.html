@@ -554,6 +554,118 @@
     line-height: 1.6;
   }
   #toolList strong { color: var(--text); font-weight: 600; }
+  .goal-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    align-items: start;
+  }
+  .goal-statement p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+    margin: 0 0 1rem;
+  }
+  .goal-statement p:last-child { margin-bottom: 0; }
+  .goal-cards { display: flex; flex-direction: column; gap: 10px; }
+  .goal-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1rem 1.25rem;
+    border-left: 3px solid var(--border);
+  }
+  .goal-card-accent { border-left-color: var(--clay); }
+  .goal-card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .goal-card-accent .goal-card-num { color: var(--clay); }
+  .goal-card-label {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--ink);
+  }
+  .goal-card-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; }
+  .goal-footer {
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .goal-footer p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.65;
+    margin: 0;
+    max-width: 600px;
+  }
+  .goal-values { margin-top: 1.75rem; }
+  .goal-eq { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .goal-eq-terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
+    max-width: 600px;
+  }
+  .goal-eq-term {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1rem 1.25rem;
+    text-align: center;
+  }
+  .goal-eq-word {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--clay);
+    margin-bottom: 6px;
+  }
+  .goal-eq-def {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .goal-eq-plus {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    padding: 0 1rem;
+    align-self: center;
+    flex-shrink: 0;
+  }
+  .goal-eq-arrow {
+    font-size: 20px;
+    color: var(--border);
+    margin: 0.6rem 0;
+    line-height: 1;
+  }
+  .goal-eq-result {
+    background: var(--ink);
+    border-radius: 3px;
+    padding: 0.75rem 2.5rem;
+    text-align: center;
+  }
+  .goal-eq-result-word {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    font-style: italic;
+    color: #F3EEF4;
+    letter-spacing: -0.01em;
+  }
   footer {
     text-align: center;
     color: var(--text-secondary);
@@ -722,6 +834,49 @@
     <h1>Internship schedule</h1>
     <p class="hero-sub">An orientation week followed by 12 weeks across four phases: external landscape research, internal discovery, focused deep dives, and opportunity definition through to final handoff.</p>
   </div>
+
+  <section>
+    <h2>The goal</h2>
+    <div class="goal-layout">
+      <div class="goal-statement">
+        <p>The goal of the summer is to discover, research, and define opportunities for a new civic engagement product. One that helps Sasaki teams have a more seamless experience doing this work, in a way that builds trust with communities.</p>
+      </div>
+      <div class="goal-cards">
+        <div class="goal-card">
+          <div class="goal-card-num">Not</div>
+          <div class="goal-card-label">Design a finished product</div>
+          <div class="goal-card-desc">The aim is to lay a foundation, not ship something complete.</div>
+        </div>
+        <div class="goal-card goal-card-accent">
+          <div class="goal-card-num">But</div>
+          <div class="goal-card-label">A constellation of products</div>
+          <div class="goal-card-desc">Define what could eventually be built out. Hopefully prototype one by the end.</div>
+        </div>
+      </div>
+    </div>
+    <div class="goal-footer">
+      <p>What exactly it will look like will depend on the needs of the Sasaki community, as well as the ethical principles of this work.</p>
+    </div>
+    <div class="goal-values">
+      <div class="goal-eq">
+        <div class="goal-eq-terms">
+          <div class="goal-eq-term">
+            <div class="goal-eq-word">Reciprocity</div>
+            <div class="goal-eq-def">communities and planners learn from each other, not just one way</div>
+          </div>
+          <div class="goal-eq-plus">+</div>
+          <div class="goal-eq-term">
+            <div class="goal-eq-word">Traceability</div>
+            <div class="goal-eq-def">input can be traced back to decisions, and decisions explained to communities</div>
+          </div>
+        </div>
+        <div class="goal-eq-arrow">↓</div>
+        <div class="goal-eq-result">
+          <div class="goal-eq-result-word">Trust</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <div id="timeline"></div>
 </div>
