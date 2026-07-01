@@ -1059,6 +1059,31 @@
   </section>
 
   <section>
+    <h2>Pain points</h2>
+    <p class="section-desc">Recurring frustrations across all 9 interviews, ranked by how many people raised each one. Hover a row to see who.</p>
+    <div id="pain-chart"></div>
+  </section>
+
+  <section>
+    <h2>What people said</h2>
+    <p class="section-desc">Click a name to expand their interview summary.</p>
+    <div id="interviewee-flows"></div>
+  </section>
+
+  <section>
+    <h2>Imagined tools</h2>
+    <p class="section-desc">When asked "if you could design any tool to help with community engagement," these ideas came up.</p>
+    <div id="imagined-tools"></div>
+  </section>
+
+  <section>
+    <h2>Quotes</h2>
+    <p class="section-desc">33 quotes from 9 interviews. Filter by theme.</p>
+    <div id="quotes-filters" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.25rem;"></div>
+    <div id="quotes-wall"></div>
+  </section>
+
+  <section>
     <h2>Interview roster</h2>
     <p class="section-desc">Filter by discipline or status. Click a person to see their project context.</p>
     <div id="interview-filters" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1.25rem;"></div>
@@ -3053,6 +3078,551 @@ const itoolImages = {
     card.querySelector('.flow-section-header').addEventListener('click', () => card.classList.toggle('open'));
     container.appendChild(card);
   });
+})();
+
+// ---- Interview Synthesis ----
+(function() {
+  const synStyle = document.createElement('style');
+  synStyle.textContent = `
+    #pain-chart { width:100%; }
+    .theme-pill {
+      font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600;
+      text-transform:uppercase; letter-spacing:0.04em;
+      padding:5px 12px; border-radius:2px; border:1px solid var(--border);
+      background:var(--card); color:var(--text-secondary); cursor:pointer;
+      transition:all 0.15s;
+    }
+    .theme-pill:hover { border-color:var(--clay); color:var(--clay); }
+    .theme-pill.active { background:var(--clay); border-color:var(--clay); color:#F3EEF4; }
+    .iee-flow-person {
+      border:1px solid var(--border); border-radius:3px;
+      margin-bottom:8px; background:var(--card); transition:border-color 0.15s;
+    }
+    .iee-flow-person:hover { border-color:var(--clay); }
+    .iee-flow-header {
+      display:flex; align-items:center; gap:12px;
+      padding:0.9rem 1.1rem; cursor:pointer;
+    }
+    .iee-flow-name { font-family:'Fraunces',serif; font-size:15px; font-weight:600; flex:1; }
+    .iee-flow-disc { font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.03em; color:var(--text-secondary); }
+    .iee-flow-chevron { font-size:12px; color:var(--text-secondary); transition:transform 0.25s; }
+    .iee-flow-person.open .iee-flow-chevron { transform:rotate(90deg); }
+    .iee-flow-body { display:none; border-top:1px solid var(--border); }
+    .iee-flow-person.open .iee-flow-body { display:block; }
+    .iee-sum-project {
+      padding:0.85rem 1.25rem;
+      background:var(--bg);
+      border-bottom:1px solid var(--border);
+      font-size:12.5px; color:var(--text-secondary); line-height:1.5;
+      display:flex; gap:10px; align-items:baseline;
+    }
+    .iee-sum-project-label {
+      font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600;
+      text-transform:uppercase; letter-spacing:0.05em; flex-shrink:0;
+    }
+    .iee-sum-body { display:grid; grid-template-columns:1fr 1fr; }
+    .iee-sum-col { padding:1.1rem 1.25rem; }
+    .iee-sum-col:first-child { border-right:1px solid var(--border); }
+    .iee-sum-label {
+      font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600;
+      text-transform:uppercase; letter-spacing:0.05em; margin-bottom:10px;
+    }
+    .iee-sum-insights { list-style:none; padding:0; margin:0; }
+    .iee-sum-insights li {
+      font-size:12.5px; color:var(--text); line-height:1.65;
+      padding:0.55rem 0 0.55rem 1rem;
+      border-top:1px solid var(--border); position:relative;
+    }
+    .iee-sum-insights li:first-child { border-top:none; padding-top:0; }
+    .iee-sum-insights li::before {
+      content:''; position:absolute; left:0; top:0.9rem;
+      width:5px; height:5px; border-radius:50%;
+    }
+    .iee-sum-pain-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:1rem; }
+    .iee-sum-pain-tag {
+      font-size:11px; padding:3px 9px; border-radius:2px;
+      background:var(--bg); border:1px solid #A8495C44;
+      color:#A8495C; font-family:'JetBrains Mono',monospace; font-weight:600;
+    }
+    .iee-sum-desire {
+      font-size:12.5px; color:var(--text); line-height:1.65;
+      font-style:italic; padding:0.6rem 0.9rem;
+      border-left:2px solid #5F6E9E; background:var(--bg); border-radius:0 2px 2px 0;
+    }
+    .imagined-tools-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+    .it-flip { perspective:800px; height:180px; }
+    .it-inner { position:relative; width:100%; height:100%; transition:transform 0.5s ease; transform-style:preserve-3d; }
+    .it-flip:hover .it-inner { transform:rotateY(180deg); }
+    .it-front, .it-back {
+      position:absolute; width:100%; height:100%; backface-visibility:hidden;
+      border-radius:3px; border:1px solid var(--border);
+      padding:1.1rem 1.25rem; display:flex; flex-direction:column;
+    }
+    .it-front { background:var(--card); align-items:center; justify-content:center; text-align:center; gap:8px; }
+    .it-back { transform:rotateY(180deg); background:var(--ink); justify-content:flex-start; overflow-y:auto; }
+    .it-back::-webkit-scrollbar { width:3px; }
+    .it-back::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.2); border-radius:2px; }
+    .it-icon { font-size:28px; line-height:1; }
+    .it-name { font-family:'Fraunces',serif; font-size:15px; font-weight:600; font-style:italic; line-height:1.25; }
+    .it-person { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-secondary); }
+    .it-back .it-person { color:rgba(255,255,255,0.45); }
+    .it-back-label { font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px; }
+    .it-idea { font-size:12px; color:#F3EEF4; line-height:1.6; }
+  `;
+  document.head.appendChild(synStyle);
+
+  // ---- Interviewee Summary Cards ----
+  const summaryData = [
+    {
+      name: 'Suna Sen', disc: 'Urban Design',
+      project: 'Community Engagement Research Grant, Technical Resources Group (TRG) toolkit',
+      insights: [
+        'Engagement planning, the decisions made before anything is run, matters as much as the engagement itself.',
+        'In-person conversations are the richest data collected but almost none of it is captured. No tool bridges what gets said in the room with what ends up in the report.',
+        'Physical and digital engagement should be connected. Right now they are treated as separate processes.'
+      ],
+      pains: ['Data Fragmentation','Internal Knowledge is Difficult to Access','Loss of valuable conversations','Limited transparency'],
+      desire: 'An integrated platform that guides planners through method selection, collects multiple data types, and synthesizes everything into one dashboard.'
+    },
+    {
+      name: 'Chris Freda', disc: 'Urban Planning',
+      project: 'Santa Monica Airport Redevelopment',
+      insights: [
+        'Customization is Sasaki\'s real competitive advantage. Every project gets its own method, sometimes an entirely new tool.',
+        'When a physical card game was converted to digital, participation jumped substantially. The content was the same; the format changed everything.',
+        'CoMap is being stretched beyond its original purpose. The team is now using it to collect feedback on design proposals, which it was not designed for.'
+      ],
+      pains: ['CoMap Limitations','Data Fragmentation','Geolocate Comments in CoMap','Manual Project Management','Recreating Engagement Timelines For Every Project'],
+      desire: 'A visual timeline builder for production and engagement schedules that is easy to set up, reusable, and customizable without starting from scratch each time.'
+    },
+    {
+      name: 'Felicia Jiang', disc: 'Urban Planning',
+      project: 'Phillips Square',
+      insights: [
+        'There is no universal engagement process. Context, client, budget, and team all shape the approach entirely. Private clients do little to no engagement.',
+        'Digital tools should support in-person engagement, not replace it. The richest engagement still happens face to face.',
+        'When exporting CoMap data, the geographic location of each comment is stripped. Spatial context is lost at the point of export.'
+      ],
+      pains: ['CoMap Limitations','Geolocate Comments in CoMap','Manual Transcription','Qualitative Analysis','Sticky Note Processing','Time consuming data analysis'],
+      desire: 'A device that reads handwriting from sticky notes and automatically creates a structured, searchable database of comments.'
+    },
+    {
+      name: 'Daniel Church', disc: 'Urban Planning',
+      project: 'Little Rock Downtown Plan',
+      insights: [
+        'Engagement should build public interest and momentum around a project, not only gather feedback. Public excitement is itself a planning outcome.',
+        'Gamification consistently increases participation. VR experiences allow children to engage meaningfully with proposals they cannot yet imagine abstractly.',
+        'A live portal embedded in a project website showing what has been heard and how it is shaping the plan would transform transparency.'
+      ],
+      pains: ['CoMap Limitations','Compiling Different Data Sources','Data Fragmentation','Manual Project Management','Manual Transcription','Qualitative Analysis'],
+      desire: 'A unified platform combining surveys, CoMap, registration, demographics, and meeting attendance into a dashboard that traces input to decisions over time.'
+    },
+    {
+      name: 'Eliza Dekker', disc: 'Urban Planning',
+      project: 'Community Engagement Pedagogy (Siqi + Timo class)',
+      insights: [
+        'Adoption is an overlooked stage. Getting a city council to understand and vote yes on a plan is itself a form of public participation that no tool currently supports.',
+        'The value of engagement tools is helping communities discuss trade-offs and conflict. Attractive renderings are not the goal.',
+        'Many communities that show up to planning processes fear displacement. Engagement tools rarely account for that emotional and political context.'
+      ],
+      pains: ['Communication with City Council','Internal Tools Require Too Much Customization','Manual Project Management','TableUI Inflexible','Time consuming data analysis'],
+      desire: 'A decision-support platform for city councils that helps elected officials understand policy trade-offs, visualize impacts, and make more informed votes during plan adoption.'
+    },
+    {
+      name: 'Annabel Consilvio', disc: 'Urban Planning',
+      project: 'Akron Innerbelt Master Plan',
+      insights: [
+        'Trust was built through local grassroots partnerships, not technology. Hiring community coordinators who already had relationships was the deciding factor.',
+        'Reviewing previous engagement results at every meeting, and explaining what was heard and how it influenced the next stage, created visible traceability.',
+        'Designers often do not see the engagement data. There is a structural disconnect between who collects community input and who makes design decisions.'
+      ],
+      pains: ['Data Fragmentation','Disconnect Between Engagement and Designers','Manual Project Management'],
+      desire: 'Large interactive touchscreens for community sketching and spatial expression, plus a dashboard that collects all engagement data in one place.'
+    },
+    {
+      name: 'Emilie Forbes', disc: 'Urban Design',
+      project: 'Baton Rouge Plan, Little Rock Downtown Plan',
+      insights: [
+        'Already using Claude and ChatGPT to summarize thousands of survey comments. AI-assisted synthesis is not a future possibility, it is a current practice filling a real gap.',
+        'A participatory budgeting game using custom "Baton Rouge dollars" turned abstract trade-offs into tangible decisions. Creative formats change what communities engage with.',
+        'Implementation documents linking community priorities to funding timelines and named stakeholders are the closest thing to traceability most projects achieve.'
+      ],
+      pains: ['Clients Desire Innovative Engagement Methods','Data Fragmentation','Public Understanding Of Planning Constraints','Qualitative Analysis','Time consuming data analysis'],
+      desire: 'AI-assisted qualitative analysis that auto-summarizes community input into themes, concerns, and opportunities with a human verification step.'
+    },
+    {
+      name: 'Lanmuzhi Yang', disc: 'Landscape Architecture',
+      project: 'Santa Monica Airport, Greenwood Community Park, Sly Park',
+      insights: [
+        'Engagement works best across three structured phases: understanding community needs, evaluating design alternatives, and prioritizing implementation. Questions should evolve, not repeat.',
+        'Trust and deeper understanding are built through in-person interaction. Digital surveys capture preferences but not reasons, and miss the people hardest to reach.',
+        'Managing community conflict in public processes is exhausting and completely unsupported by existing tools.'
+      ],
+      pains: ['Client approval constraints','Difficult to reach representative audiences','Lacking Community Trust','Limited dialogue in digital engagement','Managing community conflict','Manual Transcription','Time consuming data analysis'],
+      desire: 'Creative accessible formats for younger and underrepresented communities, plus advanced survey analytics that auto-segment responses by demographics and geography.'
+    },
+    {
+      name: 'Tanvi Sharma', disc: 'Urban Planning',
+      project: 'GW Campus Plan, Park Hill Project',
+      insights: [
+        'The biggest cost of community engagement is labor. Even small activities require enormous behind-the-scenes effort before and after the event itself.',
+        'Physical engagement creates a processing challenge: digitizing handwritten surveys, sticky notes, printed mood boards, and physical voting activities all by hand.',
+        'Building trust with hard-to-reach communities is not solved by better tools. It requires showing up, door to door, in the right language and cultural frame.'
+      ],
+      pains: ['Difficult to Create Educational Content','Lacking Community Trust'],
+      desire: 'A tool that helps create quick educational videos for social media so communities understand what is being planned and how they can get involved.'
+    }
+  ];
+
+  const colors = ['#8c99c1','#a88cad','#7fad96','#ad9b7f','#A8495C','#5F6E9E','#4F7D63','#b78e8e','#9387AD'];
+  const flowsEl = document.getElementById('interviewee-flows');
+
+  summaryData.forEach((p, pi) => {
+    const color = colors[pi % colors.length];
+    const wrap = document.createElement('div');
+    wrap.className = 'iee-flow-person';
+    wrap.innerHTML = `
+      <div class="iee-flow-header" style="border-left:3px solid ${color}">
+        <div class="iee-flow-name">${p.name}</div>
+        <div class="iee-flow-disc">${p.disc}</div>
+        <div class="iee-flow-chevron">▶</div>
+      </div>
+      <div class="iee-flow-body">
+        <div class="iee-sum-project">
+          <span class="iee-sum-project-label" style="color:#4F7D63">Project</span>
+          ${p.project}
+        </div>
+        <div class="iee-sum-body">
+          <div class="iee-sum-col">
+            <div class="iee-sum-label" style="color:${color}">Key insights</div>
+            <ul class="iee-sum-insights">
+              ${p.insights.map(i => `<li style="--dot-color:${color}"><style>.iee-sum-insights li::before{background:var(--clay)}</style>${i}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="iee-sum-col">
+            <div class="iee-sum-label" style="color:#A8495C">Pain points</div>
+            <div class="iee-sum-pain-tags">${p.pains.map(pp => `<span class="iee-sum-pain-tag">${pp}</span>`).join('')}</div>
+            <div class="iee-sum-label" style="color:#5F6E9E; margin-top:1rem;">Imagined tool</div>
+            <div class="iee-sum-desire">${p.desire}</div>
+          </div>
+        </div>
+      </div>`;
+    wrap.querySelector('.iee-flow-header').addEventListener('click', () => wrap.classList.toggle('open'));
+    flowsEl.appendChild(wrap);
+  });
+
+  // ---- Pain Points Bar Chart ----
+  const painData = {
+    'Data Fragmentation': ['Suna Sen','Chris Freda','Felicia Jiang','Daniel Church','Annabel Consilvio','Emilie Forbes'],
+    'Time consuming data analysis': ['Suna Sen','Chris Freda','Felicia Jiang','Emilie Forbes','Lanmuzhi Yang'],
+    'Manual Transcription': ['Felicia Jiang','Daniel Church','Eliza Dekker','Lanmuzhi Yang','Tanvi Sharma'],
+    'Manual Project Management': ['Chris Freda','Daniel Church','Eliza Dekker','Annabel Consilvio'],
+    'Qualitative Analysis': ['Felicia Jiang','Daniel Church','Eliza Dekker','Emilie Forbes'],
+    'CoMap Limitations': ['Chris Freda','Felicia Jiang','Daniel Church'],
+    'Sticky Note Processing': ['Felicia Jiang','Eliza Dekker','Tanvi Sharma'],
+    'Geolocate Comments in CoMap': ['Chris Freda','Felicia Jiang'],
+    'Limited transparency': ['Suna Sen','Daniel Church'],
+    'Lacking Community Trust': ['Lanmuzhi Yang','Tanvi Sharma'],
+    'Recreating Engagement Timelines': ['Chris Freda'],
+    'Loss of valuable conversations': ['Suna Sen'],
+    'Internal Knowledge is Difficult to Access': ['Suna Sen'],
+    'Compiling Different Data Sources': ['Daniel Church'],
+    'Communication with City Council': ['Eliza Dekker'],
+    'TableUI Inflexible': ['Eliza Dekker'],
+    'Internal Tools Require Too Much Customization': ['Eliza Dekker'],
+    'Disconnect Between Engagement and Designers': ['Annabel Consilvio'],
+    'Clients Desire Innovative Engagement Methods': ['Emilie Forbes'],
+    'Public Understanding Of Planning Constraints': ['Emilie Forbes'],
+    'Difficult to reach representative audiences': ['Lanmuzhi Yang'],
+    'Limited dialogue in digital engagement': ['Lanmuzhi Yang'],
+    'Managing community conflict': ['Lanmuzhi Yang'],
+    'Client approval constraints': ['Lanmuzhi Yang'],
+    'Difficult to Create Educational Content': ['Tanvi Sharma'],
+  };
+
+  const painEntries = Object.entries(painData).sort((a,b) => b[1].length - a[1].length);
+  const maxPain = painEntries[0][1].length;
+  const painColors = ['#A8495C','#A8495C','#A8495C','#a88cad','#a88cad','#8c99c1','#8c99c1','#8c99c1','#8c99c1','#D4C5D6'];
+
+  const painChartEl = document.getElementById('pain-chart');
+
+  const painStyleEl = document.createElement('style');
+  painStyleEl.textContent = `
+    .pain-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 7px 0; border-bottom: 1px solid var(--border);
+      cursor: default; transition: background 0.15s; border-radius: 2px;
+    }
+    .pain-row:last-child { border-bottom: none; }
+    .pain-row:hover { background: var(--card); }
+    .pain-label {
+      width: 230px; flex-shrink: 0;
+      font-size: 12.5px; font-weight: 500; color: var(--text);
+      line-height: 1.35;
+    }
+    .pain-bar-wrap {
+      flex: 1; height: 10px; background: var(--border);
+      border-radius: 0; overflow: hidden;
+    }
+    .pain-bar { height: 100%; border-radius: 0; transition: opacity 0.15s; }
+    .pain-row:hover .pain-bar { opacity: 0.75; }
+    .pain-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--text-secondary);
+      width: 20px; text-align: right; flex-shrink: 0;
+    }
+    .pain-people {
+      display: none; font-size: 11.5px; color: var(--text-secondary);
+      padding: 3px 0 5px 242px; line-height: 1.5;
+    }
+    .pain-row:hover + .pain-people { display: block; }
+  `;
+  document.head.appendChild(painStyleEl);
+
+  painEntries.forEach(([name, people], i) => {
+    const color = i < 3 ? '#A8495C' : i < 5 ? '#a88cad' : i < 9 ? '#8c99c1' : '#D4C5D6';
+    const pct = (people.length / maxPain) * 100;
+
+    const row = document.createElement('div');
+    row.className = 'pain-row';
+    row.innerHTML = `
+      <div class="pain-label">${name}</div>
+      <div class="pain-bar-wrap"><div class="pain-bar" style="width:${pct}%;background:${color}"></div></div>
+      <div class="pain-count">${people.length}</div>`;
+
+    const names = document.createElement('div');
+    names.className = 'pain-people';
+    names.textContent = people.join(', ');
+
+    painChartEl.appendChild(row);
+    painChartEl.appendChild(names);
+  });
+
+  // ---- Imagined Tools ----
+  const imaginedTools = [
+    { name:'The Engagement Planner', person:'Suna Sen', idea:'An integrated engagement platform that guides planners through method selection, collects multiple data types, and synthesizes results into a unified dashboard. Also bridges physical and digital engagement so in-person conversations are not lost.', icon:'🗺' },
+    { name:'Timeline Builder', person:'Chris Freda', idea:'A visual production and engagement timeline builder that is easy to set up, reusable across projects, and customizable without starting from scratch each time.', icon:'🗓' },
+    { name:'Sticky Note Reader', person:'Felicia Jiang', idea:'A device that extracts handwriting from sticky notes and automatically creates a structured, searchable database of comments, solving one of the most labor-intensive parts of in-person engagement.', icon:'📌' },
+    { name:'The Engagement Dashboard', person:'Daniel Church', idea:'A unified platform combining surveys, CoMap, participant registration, demographics, and meeting data into a single dashboard that tracks input over time and shows communities how their feedback shaped decisions.', icon:'📊' },
+    { name:'Council Compass', person:'Eliza Dekker', idea:'A decision-support platform for city councils and planning commissions that helps elected officials understand policy trade-offs, visualize planning impacts, and make more informed decisions during plan adoption.', icon:'⚖️' },
+    { name:'Community Canvas', person:'Annabel Consilvio', idea:'Large interactive touchscreens with digital mapping and sketching so community members can express spatial ideas visually, without needing technical skills or training.', icon:'🎨' },
+    { name:'AI Synthesis Engine', person:'Emilie Forbes', idea:'AI-assisted qualitative analysis that automatically summarizes thousands of community comments into themes, opportunities, and concerns, while allowing planners to verify and adjust the results.', icon:'🤖' },
+    { name:'Youth Engagement Kit', person:'Lanmuzhi Yang', idea:'Creative and accessible engagement formats that attract younger and underrepresented communities through fun and quick participation, plus advanced survey analytics that auto-segment responses by demographics and ZIP code.', icon:'🎮' },
+    { name:'Educational Video Generator', person:'Tanvi Sharma', idea:'A tool that helps planners quickly create short educational videos for social media explaining what community engagement is, what is being planned, and how people can get involved.', icon:'📱' },
+  ];
+
+  const colors2 = ['#8c99c1','#a88cad','#7fad96','#5F6E9E','#A8495C','#ad9b7f','#4F7D63','#9387AD','#7D5E83'];
+  const toolsEl = document.getElementById('imagined-tools');
+  const grid = document.createElement('div');
+  grid.className = 'imagined-tools-grid';
+
+  imaginedTools.forEach((t, i) => {
+    const color = colors2[i % colors2.length];
+    const card = document.createElement('div');
+    card.className = 'it-flip';
+    card.innerHTML = `
+      <div class="it-inner">
+        <div class="it-front" style="border-top:3px solid ${color}">
+          <div class="it-icon">${t.icon}</div>
+          <div class="it-name" style="color:${color}">${t.name}</div>
+          <div class="it-person">${t.person}</div>
+        </div>
+        <div class="it-back" style="border-top:3px solid ${color}">
+          <div class="it-back-label" style="color:${color}">What it would do</div>
+          <div class="it-idea">${t.idea}</div>
+          <div class="it-person" style="margin-top:auto;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.15);">${t.person}</div>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  toolsEl.appendChild(grid);
+})();
+
+// ---- Quotes Bank ----
+(function() {
+  const qStyle = document.createElement('style');
+  qStyle.textContent = `
+    #quotes-filters .qf-pill {
+      font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600;
+      text-transform:uppercase; letter-spacing:0.04em;
+      padding:5px 12px; border-radius:2px;
+      border:1px solid var(--border); background:var(--card);
+      color:var(--text-secondary); cursor:pointer;
+      transition:all 0.18s;
+    }
+    #quotes-filters .qf-pill:hover { border-color:var(--clay); color:var(--clay); }
+    #quotes-filters .qf-pill.active { background:var(--clay); border-color:var(--clay); color:#F3EEF4; }
+    #quotes-wall {
+      columns: 3 280px;
+      column-gap: 12px;
+    }
+    .q-card {
+      break-inside: avoid;
+      margin-bottom: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1.1rem 1.25rem;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+      display: block;
+    }
+    .q-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .q-card.hidden {
+      opacity: 0;
+      pointer-events: none;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      border: none;
+      overflow: hidden;
+    }
+    .q-text {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink);
+      margin: 0 0 0.9rem;
+    }
+    .q-text::before { content: '\u201C'; }
+    .q-text::after { content: '\u201D'; }
+    .q-meta { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
+    .q-person {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--text);
+    }
+    .q-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .q-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+    .q-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.03em;
+      padding: 2px 7px; border-radius: 2px;
+    }
+  `;
+  document.head.appendChild(qStyle);
+
+  const quotes = [
+    { text: "I think the most frustrating part is probably managing the data after that point... it's very easy for it to live in a spreadsheet that nobody opens again.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Data Management","Communication"] },
+    { text: "We do a lot of voting... and a lot of stickies on a map with preselected items. But I think new creative things are something that's maybe a little bit less explored in the Sasaki engagement toolkit.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Co-Design","Creative Visioning"] },
+    { text: "Having tech sometimes hinders the conversation... you're locked into your thing while you're filling out the survey rather than having discussion about it.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Technocratic Critique","Technology"] },
+    { text: "It's usually at the end of the day, trust... if they don't think that their voice is going to matter, then they won't show up.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Trust"] },
+    { text: "Successful engagement to me looks like a dialogue... you have what they give you, and then you present it back to them, get it right, and then make sure that you're incorporating that within the design and connecting those dots for the community.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Feedback Loop","Traceability"] },
+    { text: "The processing time on the back end is also generally a heavy lift.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Data Management"] },
+    { text: "You're reading every single comment, so you learn a lot about how people are thinking or engaging with your materials... it really helps to have to do that, even though it's a lot of work.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Learning","Understanding Community Needs"] },
+    { text: "A lot of people just use Instagram or TikTok... getting through to people on those platforms in a really catchy way. I don't think as a firm we do that very well yet.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Education","Social Media","Storytelling"] },
+    { text: "Considering the demographics of who you're trying to reach and digital access is helpful... We knew we were trying to reach elderly folks and people that might not have a lot of internet access, so we focused more on in-person strategies.", name:"Felicia Jiang", role:"Urban Planning", themes:["Digital Access","Digital vs In Person"] },
+    { text: "Usually we just put stuff into spreadsheets... We do a lot of sticky notes... then you might have 300 sticky notes that you have to type up. That's obviously very time consuming, and it would be cool if there was a different way to do that.", name:"Felicia Jiang", role:"Urban Planning", themes:["Data Management","Digitizing Paper-Based Engagement"] },
+    { text: "People can leave a comment, but when you download the comments as a CSV, I don't think it includes any identifying information... We wanted to map those comments because sometimes people just write 'I love this' or 'I hate this,' and we don't know what 'this' is referring to.", name:"Felicia Jiang", role:"Urban Planning", themes:["CoMap","Data Management","Exporting Geo-coded Data"] },
+    { text: "One of the things that I think is a real strength of Sasaki is that we bring such novelty to these projects. With almost every engagement campaign that I work on, as long as the budget is sufficient enough, we do a high degree of customization.", name:"Chris Freda", role:"Urban Planning", themes:["Customization"] },
+    { text: "We've found a lot of utility lately in using CoMap as an opportunity for folks to explore the proposals we're making later in a project. Instead of using a Google Maps base, we created an exhibit summarizing all the recommendations and collected responses on specific design proposals.", name:"Chris Freda", role:"Urban Planning", themes:["CoMap","Customization"] },
+    { text: "Some version of a tool that allows me to plug in the variables of an engagement campaign and automatically generate the production schedule would be great. Right now I recreate these timelines over and over again in Google Slides for every project.", name:"Chris Freda", role:"Urban Planning", themes:["Dream Tool"] },
+    { text: "Maybe if there was a device that you could feed sticky notes into and it would just type them up for you... because it takes a long time, especially reading really messy handwriting.", name:"Felicia Jiang", role:"Urban Planning", themes:["Dream Tool"] },
+    { text: "The important thing is not the ability for someone in the community to come in and see this rendering of a future condition. It's more about the discussion and centering some of the conflict that always comes up in these discussions as part of an engagement tool.", name:"Eliza Dekker", role:"Urban Planning", themes:["Discussion","Trade-Offs","Education"] },
+    { text: "One of the most important things for the plan to actually be adopted is that the city council or the planning commission really understands what it means for the city and the benefits or the challenges.", name:"Eliza Dekker", role:"Urban Planning", themes:["Adoption","Education","Storytelling"] },
+    { text: "The city needs money in order to create some of these public benefits... trying to tell that story too.", name:"Eliza Dekker", role:"Urban Planning", themes:["Storytelling"] },
+    { text: "So much of community engagement is just the education of the public... the more you can educate people and really ask them to think about those hard questions, I think the more informed data you're going to get out of it.", name:"Emilie Forbes", role:"Urban Design", themes:["Education","Learning"] },
+    { text: "A lot of our clients are asking for more and more innovative ways of engaging the public. They don't just want the typical online survey or sticky-dot exercise.", name:"Emilie Forbes", role:"Urban Design", themes:["Client Expectation","Innovation"] },
+    { text: "I think the more informed the public is moving forward, the better they'll understand how things work and how to ask for things.", name:"Emilie Forbes", role:"Urban Design", themes:["Education","Learning"] },
+    { text: "You're getting thousands and thousands of comments, and it can be so hard to read all of them and make sure you're synthesizing them appropriately and accurately.", name:"Emilie Forbes", role:"Urban Design", themes:["Data Management","Processing","Storytelling"] },
+    { text: "We made a pretty big effort to make sure our locations were diverse... we offered multiple times, knowing childcare can be hard, and if someone couldn't come to an event they could still provide the same input online.", name:"Emilie Forbes", role:"Urban Design", themes:["Demographics","Equity","Feedback Loop","Trust"] },
+    { text: "The first step is site analysis and listening to what people need. During that process it's educating the general public about the opportunities and constraints on the site and helping them understand the place.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Education","Learning","Listening"] },
+    { text: "You're not asking people, 'Do you want option one or option two?' Instead you're asking, 'Do you like this circulation? Do you like this parking? Which elements do you prefer?'", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Listening","Surveys"] },
+    { text: "A general point that we often get is it's hard to reach younger people and people of color... the people who normally look at city websites are people who are retired or already like to engage in this process.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Demographics","Equity","Trust"] },
+    { text: "If something happens near the playgrounds in the community and there are volunteers talking to parents there, then you'll get a lot of great feedback from people who don't have time to go to town hall meetings.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Demographics","Equity","Trust"] },
+    { text: "If you make the process more efficient and less costly, you can use that time to do more engagement, have more conversations, or focus less on time-consuming data analysis.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Data Management","Efficiency"] },
+    { text: "I wish there was a more creative way that we could engage younger people.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Gamification","Innovation","Youth"] },
+    { text: "What really excites me about the future of engagement is connecting the physical and the digital.", name:"Suna Sen", role:"Urban Design", themes:["Digital vs In Person","Hybrid","Innovation"] },
+    { text: "People just want to talk all the time. I think the audio component is huge. There's so much value in what is said in conversation.", name:"Suna Sen", role:"Urban Design", themes:["Communication","Listening","Trust"] },
+    { text: "We showed what we heard, then a synthesized map of what different groups proposed, and then the design. They were very close, so I think people felt like they were heard.", name:"Suna Sen", role:"Urban Design", themes:["Feedback Loop","Listening","Traceability"] },
+    { text: "Nobody wants to write on a sticky note. They'll put dots because that feels like less friction, but people just want to talk.", name:"Suna Sen", role:"Urban Design", themes:["Communication","Reducing Friction"] },
+  ];
+
+  // Collect all unique themes
+  const allThemes = [...new Set(quotes.flatMap(q => q.themes))].sort();
+
+  // Color per theme (cycle through palette)
+  const themePalette = ['#8c99c1','#a88cad','#7fad96','#ad9b7f','#A8495C','#5F6E9E','#4F7D63','#b78e8e','#9387AD','#7D5E83','#8C7D52','#6B8C7A','#B0568C'];
+  const themeColorMap = {};
+  allThemes.forEach((t, i) => themeColorMap[t] = themePalette[i % themePalette.length]);
+
+  // Card tints — very subtle, alternating
+  const tints = ['#F8F4F9','#F5F8F4','#F8F5F0','#F4F5F9','#F9F4F6','#F4F8F6'];
+
+  let activeTheme = null;
+
+  // Filter pills
+  const filterEl = document.getElementById('quotes-filters');
+
+  const allPill = document.createElement('button');
+  allPill.className = 'qf-pill active';
+  allPill.textContent = 'All quotes';
+  allPill.addEventListener('click', () => {
+    activeTheme = null;
+    document.querySelectorAll('.qf-pill').forEach(p => p.classList.remove('active'));
+    allPill.classList.add('active');
+    filterWall();
+  });
+  filterEl.appendChild(allPill);
+
+  allThemes.forEach(t => {
+    const pill = document.createElement('button');
+    pill.className = 'qf-pill';
+    pill.textContent = t;
+    pill.addEventListener('click', () => {
+      activeTheme = t;
+      document.querySelectorAll('.qf-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      filterWall();
+    });
+    filterEl.appendChild(pill);
+  });
+
+  // Build quote wall
+  const wall = document.getElementById('quotes-wall');
+  quotes.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.style.background = tints[i % tints.length];
+    card.dataset.themes = JSON.stringify(q.themes);
+
+    // Pick accent color from first theme
+    const accentColor = themeColorMap[q.themes[0]] || '#8c99c1';
+    card.style.borderTop = `3px solid ${accentColor}`;
+
+    card.innerHTML = `
+      <div class="q-text">${q.text}</div>
+      <div class="q-meta">
+        <div>
+          <div class="q-person">${q.name}</div>
+          <div class="q-role">${q.role}</div>
+        </div>
+        <div class="q-tags">
+          ${q.themes.map(t => `<span class="q-tag" style="background:${themeColorMap[t]}22;color:${themeColorMap[t]};border:1px solid ${themeColorMap[t]}44">${t}</span>`).join('')}
+        </div>
+      </div>`;
+    wall.appendChild(card);
+  });
+
+  function filterWall() {
+    document.querySelectorAll('.q-card').forEach(card => {
+      const themes = JSON.parse(card.dataset.themes);
+      const match = !activeTheme || themes.includes(activeTheme);
+      card.classList.toggle('hidden', !match);
+    });
+  }
 })();
 
 // ---- Internal Interviews ----
