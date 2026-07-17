@@ -1036,11 +1036,11 @@
         <div class="stat-label">People identified</div>
       </div>
       <div class="stat-block">
-        <div class="stat-num">23</div>
+        <div class="stat-num">28</div>
         <div class="stat-label">Reached out to</div>
       </div>
       <div class="stat-block">
-        <div class="stat-num">14</div>
+        <div class="stat-num">18</div>
         <div class="stat-label">Scheduled</div>
       </div>
     </div>
@@ -1066,7 +1066,7 @@
 
   <section>
     <h2>What people said</h2>
-    <p class="section-desc">Click a name to expand their interview summary.</p>
+    <p class="section-desc">Click a name to expand their interview summary. 15 interviews completed.</p>
     <div id="interviewee-flows"></div>
   </section>
 
@@ -1078,18 +1078,11 @@
 
   <section>
     <h2>Quotes</h2>
-    <p class="section-desc">33 quotes from 9 interviews. Filter by theme.</p>
+    <p class="section-desc">59 quotes from 15 interviews. Filter by theme.</p>
     <div id="quotes-filters" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.25rem;"></div>
     <div id="quotes-wall"></div>
   </section>
 
-  <section>
-    <h2>Interview roster</h2>
-    <p class="section-desc">Filter by discipline or status. Click a person to see their project context.</p>
-    <div id="interview-filters" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1.25rem;"></div>
-    <div id="interview-grid"></div>
-    <div id="interview-detail"></div>
-  </section>
 </div>
 </div><!-- end tab-interviews -->
 
@@ -3149,6 +3142,22 @@ const itoolImages = {
       font-style:italic; padding:0.6rem 0.9rem;
       border-left:2px solid #5F6E9E; background:var(--bg); border-radius:0 2px 2px 0;
     }
+    .iee-card-tabs { display:flex; border-bottom:1px solid var(--border); background:var(--bg); }
+    .iee-card-tab {
+      font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600;
+      text-transform:uppercase; letter-spacing:0.04em;
+      padding:0.5rem 1rem; border:none; background:none; cursor:pointer;
+      color:var(--text-secondary); border-bottom:2px solid transparent;
+      margin-bottom:-1px; transition:color 0.15s, border-color 0.15s;
+    }
+    .iee-card-tab:hover { color:var(--text); }
+    .iee-card-tab.active { color:var(--clay); border-bottom-color:var(--clay); }
+    .iee-tab-panel { display:none; }
+    .iee-tab-panel.active { display:block; }
+    .iee-project-detail {
+      padding:1.1rem 1.25rem; background:var(--bg);
+      font-size:12.5px; color:var(--text); line-height:1.75;
+    }
     .imagined-tools-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
     .it-flip { perspective:800px; height:180px; }
     .it-inner { position:relative; width:100%; height:100%; transition:transform 0.5s ease; transform-style:preserve-3d; }
@@ -3175,77 +3184,84 @@ const itoolImages = {
   const summaryData = [
     {
       name: 'Suna Sen', disc: 'Urban Design',
-      project: 'Community Engagement Research Grant, Technical Resources Group (TRG) toolkit',
+      project: 'Community Engagement Research Grant, Technical Resources Group',
+      projectDetail: 'Led an internal Sasaki research grant on community engagement methods alongside Felicia and Daniel, which resulted in the Technical Resources Group (TRG) toolkit — a reusable library of engagement checklists, templates, demographic survey questions, and project closeout guidance. Also ran a Design Forum Stewardship Fellowship exploring how to connect physical and digital engagement. Emphasized that live workshops used surveys and mapping exercises whose results were immediately discussed with participants, making feedback loops visible in real time.',
       insights: [
-        'Engagement planning, the decisions made before anything is run, matters as much as the engagement itself.',
+        'Engagement planning — choosing methods, understanding the community — matters as much as running the engagement itself. Most tools skip over this step entirely.',
         'In-person conversations are the richest data collected but almost none of it is captured. No tool bridges what gets said in the room with what ends up in the report.',
-        'Physical and digital engagement should be connected. Right now they are treated as separate processes.'
+        'The strongest opportunity lies in connecting physical and digital engagement rather than treating them as separate processes.'
       ],
-      pains: ['Data Fragmentation','Internal Knowledge is Difficult to Access','Loss of valuable conversations','Limited transparency'],
-      desire: 'An integrated platform that guides planners through method selection, collects multiple data types, and synthesizes everything into one dashboard.'
+      pains: ['Data Fragmentation','Internal Knowledge is Difficult to Access','Loss of valuable conversations','Limited transparency','Public Understanding Of Planning Constraints'],
+      desire: 'An integrated platform that guides planners through method selection, collects multiple data types including audio and spatial, and synthesizes everything into one dashboard.'
     },
     {
       name: 'Chris Freda', disc: 'Urban Planning',
       project: 'Santa Monica Airport Redevelopment',
+      projectDetail: 'Used the Santa Monica Airport conversion as a primary example. Developed a physical card game called Balance Builder that participants used to balance competing goals, then converted it to a digital interactive tool. The digital version generated substantially more responses than the physical one, and youth were particularly engaged using iPads. Also adapted CoMap beyond its original purpose — replacing the base map with planning exhibits so residents could react to specific design proposals, though exporting that data remained difficult.',
       insights: [
-        'Customization is Sasaki\'s real competitive advantage. Every project gets its own method, sometimes an entirely new tool.',
-        'When a physical card game was converted to digital, participation jumped substantially. The content was the same; the format changed everything.',
-        'CoMap is being stretched beyond its original purpose. The team is now using it to collect feedback on design proposals, which it was not designed for.'
+        'Customization is Sasaki\'s real competitive advantage. Every project gets its own method, sometimes its own tool — and that is genuinely valued by clients.',
+        'When a physical card game was converted to digital, participation jumped substantially. Digital formats increase volume without replacing the need for in-person depth.',
+        'CoMap is being stretched beyond its original purpose. The team now uses it to collect feedback on design proposals, which requires workarounds at every step.'
       ],
-      pains: ['CoMap Limitations','Data Fragmentation','Geolocate Comments in CoMap','Manual Project Management','Recreating Engagement Timelines For Every Project'],
+      pains: ['CoMap Limitations','Data Fragmentation','Geolocate Comments in CoMap','Manual Project Management','Recreating Engagement Timelines For Every Project','Time consuming data analysis'],
       desire: 'A visual timeline builder for production and engagement schedules that is easy to set up, reusable, and customizable without starting from scratch each time.'
     },
     {
       name: 'Felicia Jiang', disc: 'Urban Planning',
       project: 'Phillips Square',
+      projectDetail: 'Phillips Square was a culturally responsive engagement process in a multilingual Boston neighborhood. The team built trust before collecting feedback by attending community meetings, knocking on doors, and joining local events rather than leading with surveys. The project team reflected the community linguistically and culturally. Felicia noted that sometimes designers never see what came out of the engagement — there is a structural disconnect between planners conducting engagement and the designers making decisions.',
       insights: [
         'There is no universal engagement process. Context, client, budget, and team all shape the approach entirely. Private clients do little to no engagement.',
-        'Digital tools should support in-person engagement, not replace it. The richest engagement still happens face to face.',
-        'When exporting CoMap data, the geographic location of each comment is stripped. Spatial context is lost at the point of export.'
+        'Digital tools should support in-person engagement, not replace it. The richest engagement still happens face to face, especially when building trust with communities.',
+        'When exporting CoMap data, the geographic location of each comment is stripped from the CSV — spatial context is lost at the exact moment it is most needed.'
       ],
-      pains: ['CoMap Limitations','Geolocate Comments in CoMap','Manual Transcription','Qualitative Analysis','Sticky Note Processing','Time consuming data analysis'],
+      pains: ['CoMap Limitations','Data Fragmentation','Geolocate Comments in CoMap','Manual Transcription','Qualitative Analysis','Sticky Note Processing','Time consuming data analysis'],
       desire: 'A device that reads handwriting from sticky notes and automatically creates a structured, searchable database of comments.'
     },
     {
       name: 'Daniel Church', disc: 'Urban Planning',
       project: 'Little Rock Downtown Plan',
+      projectDetail: 'The Little Rock Downtown Plan used engagement to build public interest in both downtown and the planning process itself — not only to gather feedback. The team experimented with VR headsets so children could visualize park futures, and used Typeform as their primary survey tool alongside Mentimeter for live polling. Daniel emphasized that a live engagement portal embedded in the project website showing "here is what we\'ve heard" would have been transformative for public transparency.',
       insights: [
-        'Engagement should build public interest and momentum around a project, not only gather feedback. Public excitement is itself a planning outcome.',
-        'Gamification consistently increases participation. VR experiences allow children to engage meaningfully with proposals they cannot yet imagine abstractly.',
-        'A live portal embedded in a project website showing what has been heard and how it is shaping the plan would transform transparency.'
+        'Engagement should build excitement and momentum around a project, not only gather feedback. Public interest is itself a planning outcome worth designing for.',
+        'Gamification consistently increases participation. VR experiences allowed children to engage meaningfully with proposals they could not yet imagine abstractly.',
+        'A live portal embedded in a project website showing what has been heard and how it is shaping the plan would transform public transparency without adding much effort.'
       ],
       pains: ['CoMap Limitations','Compiling Different Data Sources','Data Fragmentation','Manual Project Management','Manual Transcription','Qualitative Analysis'],
       desire: 'A unified platform combining surveys, CoMap, registration, demographics, and meeting attendance into a dashboard that traces input to decisions over time.'
     },
     {
       name: 'Eliza Dekker', disc: 'Urban Planning',
-      project: 'Community Engagement Pedagogy (Siqi + Timo class)',
+      project: 'Community Engagement Pedagogy',
+      projectDetail: 'Eliza drew on her work co-teaching a community engagement class with Siqi and Timo, as well as several planning projects. She emphasized that the adoption phase — getting city councils to understand and vote yes on a plan — is treated as a formality but is actually a critical engagement moment. Regular pre-adoption meetings with planning commissions helped decision-makers engage with proposals before formal public hearings. She also reflected on communities that fear displacement, arguing that engagement tools rarely account for the emotional and political context participants bring.',
       insights: [
-        'Adoption is an overlooked stage. Getting a city council to understand and vote yes on a plan is itself a form of public participation that no tool currently supports.',
-        'The value of engagement tools is helping communities discuss trade-offs and conflict. Attractive renderings are not the goal.',
+        'Adoption is a completely overlooked stage. Getting a city council to understand and vote yes on a plan is itself a form of public engagement that no tool currently supports.',
+        'The value of engagement tools is helping communities discuss trade-offs and conflict — not producing attractive renderings. AI should support conversation, not replace it.',
         'Many communities that show up to planning processes fear displacement. Engagement tools rarely account for that emotional and political context.'
       ],
-      pains: ['Communication with City Council','Internal Tools Require Too Much Customization','Manual Project Management','TableUI Inflexible','Time consuming data analysis'],
-      desire: 'A decision-support platform for city councils that helps elected officials understand policy trade-offs, visualize impacts, and make more informed votes during plan adoption.'
+      pains: ['Communication with City Council','Internal Tools Require Too Much Customization','Manual Project Management','Manual Transcription','Qualitative Analysis','Sticky Note Processing','TableUI Inflexible','Time consuming data analysis'],
+      desire: 'A decision-support platform for city councils that helps elected officials understand policy trade-offs, visualize planning impacts, and make more informed votes during adoption.'
     },
     {
       name: 'Annabel Consilvio', disc: 'Urban Planning',
       project: 'Akron Innerbelt Master Plan',
+      projectDetail: 'The Akron Innerbelt Master Plan focused on a historically harmed community affected by highway construction. Trust was built by partnering with a local grassroots engagement consultant and hiring community coordinators who already had relationships in the area. The team intentionally decided against CoMap because the primary audience was an older population and a similar mapping exercise had already been done. Each meeting opened by reviewing what was heard previously and how it influenced the current stage — creating visible traceability without any dedicated tool.',
       insights: [
-        'Trust was built through local grassroots partnerships, not technology. Hiring community coordinators who already had relationships was the deciding factor.',
-        'Reviewing previous engagement results at every meeting, and explaining what was heard and how it influenced the next stage, created visible traceability.',
-        'Designers often do not see the engagement data. There is a structural disconnect between who collects community input and who makes design decisions.'
+        'Trust was built through local grassroots partnerships, not technology. Hiring community coordinators who already had relationships in the community was the deciding factor.',
+        'Beginning each meeting by reviewing what was heard previously and how it influenced the next stage created visible traceability and built real credibility with residents.',
+        'Designers often do not see the engagement data. There is a structural disconnect between who collects community input and who makes the design decisions.'
       ],
-      pains: ['Data Fragmentation','Disconnect Between Engagement and Designers','Manual Project Management'],
-      desire: 'Large interactive touchscreens for community sketching and spatial expression, plus a dashboard that collects all engagement data in one place.'
+      pains: ['Data Fragmentation','Disconnect Between Community Engagement and Designers','Manual Project Management'],
+      desire: 'Large interactive touchscreens for community sketching and a dashboard that collects all engagement data in one place.'
     },
     {
       name: 'Emilie Forbes', disc: 'Urban Design',
       project: 'Baton Rouge Plan, Little Rock Downtown Plan',
+      projectDetail: 'On the Baton Rouge Plan, Emilie introduced a participatory budgeting game using custom "Baton Rouge dollars," requiring participants to allocate limited funds across projects and prioritize investments rather than simply voting for everything. The team created implementation documents that clearly linked community priorities to funding strategies, timelines, and responsible stakeholders. Project websites provided public access to reports, presentations, and engagement summaries throughout the project lifecycle. Emilie also used Claude and ChatGPT to summarize thousands of survey comments before manual review.',
       insights: [
-        'Already using Claude and ChatGPT to summarize thousands of survey comments. AI-assisted synthesis is not a future possibility, it is a current practice filling a real gap.',
-        'A participatory budgeting game using custom "Baton Rouge dollars" turned abstract trade-offs into tangible decisions. Creative formats change what communities engage with.',
-        'Implementation documents linking community priorities to funding timelines and named stakeholders are the closest thing to traceability most projects achieve.'
+        'Already using Claude and ChatGPT to summarize thousands of survey comments. AI-assisted synthesis is a current practice filling a real gap — not a future idea.',
+        'A participatory budgeting game using custom Baton Rouge dollars turned abstract trade-offs into tangible decisions. Creative formats change what communities are willing to engage with.',
+        'Implementation documents that link community priorities to funding timelines and named stakeholders are the closest thing to traceability most projects achieve — when built in from the start.'
       ],
       pains: ['Clients Desire Innovative Engagement Methods','Data Fragmentation','Public Understanding Of Planning Constraints','Qualitative Analysis','Time consuming data analysis'],
       desire: 'AI-assisted qualitative analysis that auto-summarizes community input into themes, concerns, and opportunities with a human verification step.'
@@ -3253,32 +3269,108 @@ const itoolImages = {
     {
       name: 'Lanmuzhi Yang', disc: 'Landscape Architecture',
       project: 'Santa Monica Airport, Greenwood Community Park, Sly Park',
+      projectDetail: 'At Santa Monica Airport, CoMap was used for both existing conditions mapping and evaluating design alternatives. Balance Builder helped participants understand trade-offs between environmental impact, financial sustainability, and accessibility. Faced persistent challenges reaching younger people and communities of color, ultimately leading the city to conduct one-on-one outreach at people\'s homes. Engagement Hubs served as long-term public archives where residents could revisit previous engagement and educational resources between phases.',
       insights: [
-        'Engagement works best across three structured phases: understanding community needs, evaluating design alternatives, and prioritizing implementation. Questions should evolve, not repeat.',
-        'Trust and deeper understanding are built through in-person interaction. Digital surveys capture preferences but not reasons, and miss the people hardest to reach.',
-        'Managing community conflict in public processes is exhausting and completely unsupported by existing tools.'
+        'Engagement works best across three structured phases: understanding community needs, evaluating design alternatives, and prioritizing implementation — with questions that evolve at each stage.',
+        'Trust and deeper understanding are built through in-person interaction. Digital surveys capture preferences but not reasons, and consistently miss the people hardest to reach.',
+        'Managing community conflict in public processes is exhausting and completely unsupported by any existing tool or methodology.'
       ],
-      pains: ['Client approval constraints','Difficult to reach representative audiences','Lacking Community Trust','Limited dialogue in digital engagement','Managing community conflict','Manual Transcription','Time consuming data analysis'],
+      pains: ['Client approval constraints','Difficult to reach representative audiences','Lacking Community Trust','Limited dialogue in digital engagement','Managing community conflict','Manual Project Management','Manual Transcription','Time consuming data analysis'],
       desire: 'Creative accessible formats for younger and underrepresented communities, plus advanced survey analytics that auto-segment responses by demographics and geography.'
     },
     {
       name: 'Tanvi Sharma', disc: 'Urban Planning',
       project: 'GW Campus Plan, Park Hill Project',
+      projectDetail: 'The GW Campus Plan used engagement across multiple phases including stakeholder mapping, department meetings, work sessions, and open houses. The Park Hill project attempted to reach Black and Hispanic residents through door-to-door outreach, Spanish paper surveys, and additional efforts outside the original scope — but participation remained low because of a trust issue rather than an outreach or technology issue. Tanvi noted that even when significant effort is made, some communities remain hard to reach because of historical distrust of planning processes.',
       insights: [
-        'The biggest cost of community engagement is labor. Even small activities require enormous behind-the-scenes effort before and after the event itself.',
-        'Physical engagement creates a processing challenge: digitizing handwritten surveys, sticky notes, printed mood boards, and physical voting activities all by hand.',
-        'Building trust with hard-to-reach communities is not solved by better tools. It requires showing up, door to door, in the right language and cultural frame.'
+        'The biggest cost of community engagement is labor. Even small activities require enormous behind-the-scenes effort before and after the event — digitizing, transcribing, organizing.',
+        'Physical engagement creates a processing challenge: handwritten surveys, sticky notes, printed mood boards, and physical voting activities all need to be digitized by hand.',
+        'Building trust with hard-to-reach communities is not a technology problem. At Park Hill, significant outreach still failed to increase participation because of community distrust.'
       ],
-      pains: ['Difficult to Create Educational Content','Lacking Community Trust'],
+      pains: ['Difficult to Create Educational Content for Social Media','Lacking Community Trust'],
       desire: 'A tool that helps create quick educational videos for social media so communities understand what is being planned and how they can get involved.'
+    },
+    {
+      name: 'Carrie Latimer', disc: 'Urban Planning',
+      project: 'Aurora Parks and Recreation Master Plan',
+      projectDetail: 'Developed a custom park mapping survey that let residents comment on individual parks across the city. This generated detailed, site-specific feedback but made it difficult to identify broader system-wide needs — leading the team to rethink how future park surveys should be structured. Used Balance Builder as an education tool rather than a data collection tool, placing community members in the role of decision-makers to help them understand why certain planning decisions were made rather than to gather preferences.',
+      insights: [
+        'The most impactful engagement activities put residents in the role of decision-makers, helping them understand planning constraints rather than simply collecting opinions.',
+        'Engagement outcomes and methods should shift across project phases — early phases identify system-wide needs, while later phases evaluate specific design alternatives.',
+        'Translation and multilingual materials are not optional extras. They are the difference between reaching a community and excluding it.'
+      ],
+      pains: ['Analyzing system wide needs','Budget Constraints','CoMap Limitations','Hybrid Participation is Difficult','Survey Fatigue','Time Constraints leads to less immersive engagements'],
+      desire: "A next-generation CoMap that supports commenting directly on framework plans, lets participants view and endorse each other's comments, and provides stronger spatial analysis."
+    },
+    {
+      name: 'Margit Liander', disc: 'Urban Planning',
+      project: 'Pilgrim 1600 Acre Area Plan',
+      projectDetail: 'The Pilgrim 1600 project reframed community engagement as planning literacy. The process began with facilitated discussion groups to identify preferred land uses, followed by a TableUI workshop where participants could see in real time how different land use decisions affected fiscal outcomes. The two sequential phases built on each other: the first established community values, while the second challenged participants to reconsider those values after experiencing fiscal trade-offs. Final documents included dedicated sections showing what was heard and how it influenced design changes.',
+      insights: [
+        'The most compelling engagement reframes community participation as planning literacy — helping residents understand constraints, costs, and trade-offs before asking for their opinion.',
+        'Sequential engagement phases that build on each other work better than repeated surveys asking the same questions. The second TableUI workshop challenged participants to reconsider values formed in the first session.',
+        'Participants often question the assumptions built into planning tools. A simpler way to communicate model assumptions would dramatically improve trust in the results.'
+      ],
+      pains: ['Balancing Aspirations with Feasibility','Client approval constraints','Engagement becomes repetitive','Public Understanding Of Planning Constraints','Survey Fatigue','Tension between community needs and client expectations','collecting representative data'],
+      desire: 'Interactive planning simulators that let residents experiment with scenarios, visualize trade-offs, and understand the consequences of different decisions before providing feedback.'
+    },
+    {
+      name: 'Jane Cole', disc: 'Urban Planning',
+      project: 'Berklee College of Music, Santa Monica Airport, Tulane Campus',
+      projectDetail: 'At Santa Monica Airport, Jane was responsible for translating physical engagement artifacts — sticky notes, rankings, workshop boards — into digital summaries for planners and clients. One of her biggest challenges was preserving the context of physical materials, so she photographed boards in sequence and embedded images directly into reports alongside transcribed content. At Berklee, CoMap was used to collect and map survey responses, but findings were primarily used to validate existing planning themes rather than generate new ideas.',
+      insights: [
+        'Community engagement often happens at the beginning of campus planning projects and is rarely revisited — which raises questions about how engagement data actually translates into decisions.',
+        'CoMap is currently used more to validate and communicate planning themes that already exist than to directly generate new design ideas.',
+        'One of the biggest challenges is preserving the context of physical engagement artifacts: a sticky note that says "I love this" means nothing without knowing where on the plan it was placed.'
+      ],
+      pains: ['Balancing Aspirations with Feasibility','Data Fragmentation','Expensive','Lacking Community Trust','Manual Transcription','Public Understanding Of Planning Constraints','Qualitative Analysis','Sticky Note Processing'],
+      desire: 'A simple, highly visual, user-friendly GIS platform that both planners and non-experts can use together during engagement — without needing technical knowledge.'
+    },
+    {
+      name: 'Maya Diaz', disc: 'Urban Planning',
+      project: 'Downtown Oklahoma City, Pittsburgh Comprehensive Plan, GWU Campus, Miami Valley',
+      projectDetail: 'On the Pittsburgh Comprehensive Plan, Sasaki was responsible only for community engagement while another consultant handled technical planning — making it especially difficult to communicate complex planning concepts to the public. The project launched with the 90-to-1 photo campaign, which celebrated Pittsburgh residents through portraits and personal stories, creating early excitement. Used summer engagement grants to fund local organizations hosting their own neighborhood events. On Oklahoma City, Dashi was used to evaluate implementation scenarios but lacked compelling visual outputs for external communication.',
+      insights: [
+        'The biggest gap is not data collection but communication — translating complex planning analysis into visual outputs that clients and community members can actually understand.',
+        'Community engagement should generate excitement around planning, not just gather input. The Pittsburgh 90-to-1 photo campaign created early momentum that carried through the entire process.',
+        'Digital engagement often reaches the same people who already show up. Reaching underrepresented communities requires going to where they already are.'
+      ],
+      pains: ['Client approval constraints','Difficult to reach representative audiences','Engagement becomes repetitive','Hard to Understand Technical Outputs','Political Dynamics','Public Understanding Of Planning Constraints','Tension between community needs and client expectations'],
+      desire: 'A highly visual, gamified engagement platform that translates complicated planning concepts into intuitive graphics instead of text-heavy reports.'
+    },
+    {
+      name: 'Robert Sugar', disc: 'Urban Planning',
+      project: 'William and Mary Campus Master Plan',
+      projectDetail: 'The William and Mary Master Plan combined CoMap, collaboration surveys, Mentimeter workshops, physical engagement boards, and implementation exercises. The collaboration survey data from a separate Quinnipiac University Science Building project directly influenced the organization of a new academic building. Used iPads to overlay 3D classroom models onto printed floor plans, making design proposals easier for non-designers to understand. Described post-processing — translating engagement outputs into presentations in Illustrator and PowerPoint — as the most time-consuming part of any engagement process.',
+      insights: [
+        'The most valuable engagement insight came from in-person conversations, not surveys. Quantitative data validates directions; qualitative dialogue reveals the reasoning behind preferences.',
+        'Post-processing is the biggest time sink: analysis, visualization, and reporting all happen in external tools after engagement ends. Doing more of this within the engagement platform itself would save enormous effort.',
+        'Immersive technologies like AR and VR have real potential for helping non-designers understand spatial proposals — but accessibility and ease of use are prerequisites.'
+      ],
+      pains: ['Data Fragmentation','Difficult to reach representative audiences','People prefer physical engagement over digital','Post Processing is Time Consuming','Public Understanding Of Planning Constraints','Survey Fatigue','collecting representative data'],
+      desire: 'An immersive engagement platform using AR or VR to help communities experience planning proposals, with real-time analysis built directly into the platform.'
+    },
+    {
+      name: 'Jazzlynn Derrick', disc: 'Urban Planning',
+      project: 'Campus Master Planning, City of Boston, CBPR Research',
+      projectDetail: 'Jazzlynn drew on three streams of experience: campus master planning at Sasaki, previous accountability work with the City of Boston, and NIH-funded Community Based Participatory Research (CBPR) projects. In campus planning, she described typical engagement starting with listening sessions for leadership and facilities staff, followed by student engagement through CoMap, then open houses. She noted that the same participants are often engaged repeatedly throughout a long process. Her City of Boston work focused on communicating project progress to residents and increasing municipal accountability through public reporting. Her CBPR work introduced PhotoVoice — participants documented their daily lives through photography over several weeks, then selected and discussed images that best represented their experiences, shaping the narrative themselves.',
+      insights: [
+        'Gamification risks infantilizing adult participants. Many people arrive at open houses expecting to be heard but instead spend the session learning to play a game. The method can undermine the seriousness of the engagement.',
+        'Community Based Participatory Research is a better model for engagement: it emphasizes horizontal relationships, shared leadership, reciprocity rather than extraction, and trains communities to participate as decision-makers rather than subjects.',
+        'Accountability after engagement is the biggest unmet need. Participants have no way of knowing whether anyone read their comments, what influenced the final decisions, or what was eventually built.'
+      ],
+      pains: ['Gamification is infantilizing','Inconsistent Engagement Practices','Lack of Accountability','Lacking Community Trust','Long Term Planning: difficult retaining participants over time','Poor Expectation Setting','Public Understanding Of Planning Constraints','Survey Fatigue','Tension between community needs and client expectations'],
+      desire: 'A progress dashboard that allows participants to follow the full lifecycle of their contributions — from initial engagement, to the master plan, to implementation, to completed projects — making planning accountability visible and continuous.'
     }
   ];
 
-  const colors = ['#8c99c1','#a88cad','#7fad96','#ad9b7f','#A8495C','#5F6E9E','#4F7D63','#b78e8e','#9387AD'];
+  
+  const colors = ['#8c99c1','#a88cad','#7fad96','#ad9b7f','#A8495C','#5F6E9E','#4F7D63','#b78e8e','#9387AD','#8C7D52','#5e7a6b','#6B8C7A','#B0568C','#8B95B0','#7D5E83'];
   const flowsEl = document.getElementById('interviewee-flows');
 
   summaryData.forEach((p, pi) => {
     const color = colors[pi % colors.length];
+    const uid = `iee-${pi}`;
     const wrap = document.createElement('div');
     wrap.className = 'iee-flow-person';
     wrap.innerHTML = `
@@ -3288,22 +3380,30 @@ const itoolImages = {
         <div class="iee-flow-chevron">▶</div>
       </div>
       <div class="iee-flow-body">
-        <div class="iee-sum-project">
-          <span class="iee-sum-project-label" style="color:#4F7D63">Project</span>
-          ${p.project}
+        <div class="iee-card-tabs">
+          <button class="iee-card-tab active" onclick="switchIeeTab('${uid}','summary',this)">Summary</button>
+          <button class="iee-card-tab" onclick="switchIeeTab('${uid}','project',this)">Project</button>
         </div>
-        <div class="iee-sum-body">
-          <div class="iee-sum-col">
-            <div class="iee-sum-label" style="color:${color}">Key insights</div>
-            <ul class="iee-sum-insights">
-              ${p.insights.map(i => `<li style="--dot-color:${color}"><style>.iee-sum-insights li::before{background:var(--clay)}</style>${i}</li>`).join('')}
-            </ul>
+        <div id="${uid}-summary" class="iee-tab-panel active">
+          <div class="iee-sum-body">
+            <div class="iee-sum-col">
+              <div class="iee-sum-label" style="color:${color}">Key insights</div>
+              <ul class="iee-sum-insights">
+                ${p.insights.map(i => `<li>${i}</li>`).join('')}
+              </ul>
+            </div>
+            <div class="iee-sum-col">
+              <div class="iee-sum-label" style="color:#A8495C">Pain points</div>
+              <div class="iee-sum-pain-tags">${p.pains.map(pp => `<span class="iee-sum-pain-tag">${pp}</span>`).join('')}</div>
+              <div class="iee-sum-label" style="color:#5F6E9E; margin-top:1rem;">Imagined tool</div>
+              <div class="iee-sum-desire">${p.desire}</div>
+            </div>
           </div>
-          <div class="iee-sum-col">
-            <div class="iee-sum-label" style="color:#A8495C">Pain points</div>
-            <div class="iee-sum-pain-tags">${p.pains.map(pp => `<span class="iee-sum-pain-tag">${pp}</span>`).join('')}</div>
-            <div class="iee-sum-label" style="color:#5F6E9E; margin-top:1rem;">Imagined tool</div>
-            <div class="iee-sum-desire">${p.desire}</div>
+        </div>
+        <div id="${uid}-project" class="iee-tab-panel">
+          <div class="iee-project-detail">
+            <div class="iee-sum-label" style="color:#4F7D63; padding:1.1rem 1.25rem 0.5rem;">${p.project}</div>
+            <div style="padding:0 1.25rem 1.1rem">${p.projectDetail}</div>
           </div>
         </div>
       </div>`;
@@ -3311,35 +3411,56 @@ const itoolImages = {
     flowsEl.appendChild(wrap);
   });
 
-  // ---- Pain Points Bar Chart ----
-  const painData = {
-    'Data Fragmentation': ['Suna Sen','Chris Freda','Felicia Jiang','Daniel Church','Annabel Consilvio','Emilie Forbes'],
-    'Time consuming data analysis': ['Suna Sen','Chris Freda','Felicia Jiang','Emilie Forbes','Lanmuzhi Yang'],
-    'Manual Transcription': ['Felicia Jiang','Daniel Church','Eliza Dekker','Lanmuzhi Yang','Tanvi Sharma'],
-    'Manual Project Management': ['Chris Freda','Daniel Church','Eliza Dekker','Annabel Consilvio'],
-    'Qualitative Analysis': ['Felicia Jiang','Daniel Church','Eliza Dekker','Emilie Forbes'],
-    'CoMap Limitations': ['Chris Freda','Felicia Jiang','Daniel Church'],
-    'Sticky Note Processing': ['Felicia Jiang','Eliza Dekker','Tanvi Sharma'],
-    'Geolocate Comments in CoMap': ['Chris Freda','Felicia Jiang'],
-    'Limited transparency': ['Suna Sen','Daniel Church'],
-    'Lacking Community Trust': ['Lanmuzhi Yang','Tanvi Sharma'],
-    'Recreating Engagement Timelines': ['Chris Freda'],
-    'Loss of valuable conversations': ['Suna Sen'],
-    'Internal Knowledge is Difficult to Access': ['Suna Sen'],
-    'Compiling Different Data Sources': ['Daniel Church'],
-    'Communication with City Council': ['Eliza Dekker'],
-    'TableUI Inflexible': ['Eliza Dekker'],
-    'Internal Tools Require Too Much Customization': ['Eliza Dekker'],
-    'Disconnect Between Engagement and Designers': ['Annabel Consilvio'],
-    'Clients Desire Innovative Engagement Methods': ['Emilie Forbes'],
-    'Public Understanding Of Planning Constraints': ['Emilie Forbes'],
-    'Difficult to reach representative audiences': ['Lanmuzhi Yang'],
-    'Limited dialogue in digital engagement': ['Lanmuzhi Yang'],
-    'Managing community conflict': ['Lanmuzhi Yang'],
-    'Client approval constraints': ['Lanmuzhi Yang'],
-    'Difficult to Create Educational Content': ['Tanvi Sharma'],
+  window.switchIeeTab = function(uid, tab, btn) {
+    document.getElementById(uid+'-summary').classList.toggle('active', tab === 'summary');
+    document.getElementById(uid+'-project').classList.toggle('active', tab === 'project');
+    btn.closest('.iee-card-tabs').querySelectorAll('.iee-card-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
   };
 
+  // ---- Pain Points Bar Chart ----
+  const painData = {
+    'Data Fragmentation': ['Annabel Consilvio','Chris Freda','Daniel Church','Emilie Forbes','Felicia Jiang','Jane Cole','Robert Sugar','Suna Sen'],
+    'Public Understanding Of Planning Constraints': ['Emilie Forbes','Jane Cole','Jazzlynn Derrick','Margit Liander','Maya Diaz','Robert Sugar','Suna Sen'],
+    'Manual Project Management': ['Annabel Consilvio','Chris Freda','Daniel Church','Eliza Dekker','Lanmuzhi Yang'],
+    'Time consuming data analysis': ['Chris Freda','Eliza Dekker','Emilie Forbes','Felicia Jiang','Lanmuzhi Yang'],
+    'Manual Transcription': ['Daniel Church','Eliza Dekker','Felicia Jiang','Jane Cole','Lanmuzhi Yang'],
+    'Qualitative Analysis': ['Daniel Church','Eliza Dekker','Emilie Forbes','Felicia Jiang','Jane Cole'],
+    'CoMap Limitations': ['Carrie Latimer','Chris Freda','Daniel Church','Felicia Jiang'],
+    'Survey Fatigue': ['Carrie Latimer','Margit Liander','Robert Sugar','Jazzlynn Derrick'],
+    'Sticky Note Processing': ['Eliza Dekker','Felicia Jiang','Jane Cole'],
+    'Lacking Community Trust': ['Jane Cole','Lanmuzhi Yang','Tanvi Sharma','Jazzlynn Derrick'],
+    'Client approval constraints': ['Lanmuzhi Yang','Margit Liander','Maya Diaz'],
+    'Difficult to reach representative audiences': ['Lanmuzhi Yang','Maya Diaz','Robert Sugar'],
+    'Geolocate Comments in CoMap': ['Chris Freda','Felicia Jiang'],
+    'Balancing Aspirations with Feasibility': ['Jane Cole','Margit Liander'],
+    'Engagement becomes repetitive': ['Margit Liander','Maya Diaz'],
+    'Tension between community needs and client expectations': ['Jazzlynn Derrick','Margit Liander','Maya Diaz'],
+    'Collecting representative data': ['Margit Liander','Robert Sugar'],
+    'Disconnect Between Engagement and Designers': ['Annabel Consilvio'],
+    'Analyzing system wide needs': ['Carrie Latimer'],
+    'Budget Constraints': ['Carrie Latimer'],
+    'Hybrid Participation is Difficult': ['Carrie Latimer'],
+    'Recreating Engagement Timelines': ['Chris Freda'],
+    'Compiling Different Data Sources': ['Daniel Church'],
+    'Communication with City Council': ['Eliza Dekker'],
+    'Internal Tools Require Too Much Customization': ['Eliza Dekker'],
+    'TableUI Inflexible': ['Eliza Dekker'],
+    'Clients Desire Innovative Engagement Methods': ['Emilie Forbes'],
+    'Hard to Understand Technical Outputs': ['Maya Diaz'],
+    'Political Dynamics': ['Maya Diaz'],
+    'People prefer physical engagement over digital': ['Robert Sugar'],
+    'Post Processing is Time Consuming': ['Robert Sugar'],
+    'Internal Knowledge is Difficult to Access': ['Suna Sen'],
+    'Limited transparency': ['Suna Sen'],
+    'Loss of valuable conversations': ['Suna Sen'],
+    'Difficult to Create Educational Content': ['Tanvi Sharma'],
+    'Gamification is infantilizing': ['Jazzlynn Derrick'],
+    'Inconsistent Engagement Practices': ['Jazzlynn Derrick'],
+    'Lack of Accountability': ['Jazzlynn Derrick'],
+    'Long Term Planning: difficult retaining participants': ['Jazzlynn Derrick'],
+    'Poor Expectation Setting': ['Jazzlynn Derrick'],
+  }
   const painEntries = Object.entries(painData).sort((a,b) => b[1].length - a[1].length);
   const maxPain = painEntries[0][1].length;
   const painColors = ['#A8495C','#A8495C','#A8495C','#a88cad','#a88cad','#8c99c1','#8c99c1','#8c99c1','#8c99c1','#D4C5D6'];
@@ -3400,18 +3521,24 @@ const itoolImages = {
 
   // ---- Imagined Tools ----
   const imaginedTools = [
-    { name:'The Engagement Planner', person:'Suna Sen', idea:'An integrated engagement platform that guides planners through method selection, collects multiple data types, and synthesizes results into a unified dashboard. Also bridges physical and digital engagement so in-person conversations are not lost.', icon:'🗺' },
-    { name:'Timeline Builder', person:'Chris Freda', idea:'A visual production and engagement timeline builder that is easy to set up, reusable across projects, and customizable without starting from scratch each time.', icon:'🗓' },
-    { name:'Sticky Note Reader', person:'Felicia Jiang', idea:'A device that extracts handwriting from sticky notes and automatically creates a structured, searchable database of comments, solving one of the most labor-intensive parts of in-person engagement.', icon:'📌' },
-    { name:'The Engagement Dashboard', person:'Daniel Church', idea:'A unified platform combining surveys, CoMap, participant registration, demographics, and meeting data into a single dashboard that tracks input over time and shows communities how their feedback shaped decisions.', icon:'📊' },
+    { name:'The Engagement Planner', person:'Suna Sen', idea:'An integrated platform that guides planners through method selection, collects multiple data types including audio and spatial, and synthesizes results into a unified dashboard. Bridges physical and digital engagement so in-person conversations are not lost.', icon:'🗺' },
+    { name:'Timeline Builder', person:'Chris Freda', idea:'A visual production and engagement timeline builder that is easy to set up, reusable across projects, and customizable without starting from scratch every time.', icon:'🗓' },
+    { name:'Sticky Note Reader', person:'Felicia Jiang', idea:'A device that reads handwriting from sticky notes and automatically creates a structured, searchable database of comments, solving one of the most labor-intensive parts of physical engagement.', icon:'📌' },
+    { name:'The Engagement Dashboard', person:'Daniel Church', idea:'A unified platform combining surveys, CoMap, participant registration, demographics, and meeting data into one dashboard that tracks input over time and shows communities how their feedback shaped decisions.', icon:'📊' },
     { name:'Council Compass', person:'Eliza Dekker', idea:'A decision-support platform for city councils and planning commissions that helps elected officials understand policy trade-offs, visualize planning impacts, and make more informed decisions during plan adoption.', icon:'⚖️' },
-    { name:'Community Canvas', person:'Annabel Consilvio', idea:'Large interactive touchscreens with digital mapping and sketching so community members can express spatial ideas visually, without needing technical skills or training.', icon:'🎨' },
-    { name:'AI Synthesis Engine', person:'Emilie Forbes', idea:'AI-assisted qualitative analysis that automatically summarizes thousands of community comments into themes, opportunities, and concerns, while allowing planners to verify and adjust the results.', icon:'🤖' },
-    { name:'Youth Engagement Kit', person:'Lanmuzhi Yang', idea:'Creative and accessible engagement formats that attract younger and underrepresented communities through fun and quick participation, plus advanced survey analytics that auto-segment responses by demographics and ZIP code.', icon:'🎮' },
+    { name:'Community Canvas', person:'Annabel Consilvio', idea:'Large interactive touchscreens with digital mapping and sketching so community members can express spatial ideas visually, paired with a dashboard that collects all engagement data in one place.', icon:'🎨' },
+    { name:'AI Synthesis Engine', person:'Emilie Forbes', idea:'AI-assisted qualitative analysis that automatically summarizes thousands of community comments into themes, opportunities, and concerns, with a human verification step and demographic mapping built in.', icon:'🤖' },
+    { name:'Youth Engagement Kit', person:'Lanmuzhi Yang', idea:'Creative accessible formats that attract younger and underrepresented communities through fun and quick participation, plus advanced survey analytics that auto-segment responses by demographics and geography.', icon:'🎮' },
     { name:'Educational Video Generator', person:'Tanvi Sharma', idea:'A tool that helps planners quickly create short educational videos for social media explaining what community engagement is, what is being planned, and how people can get involved.', icon:'📱' },
+    { name:'CoMap 2.0', person:'Carrie Latimer', idea:'A next-generation CoMap that supports commenting directly on framework plans, lets participants view and endorse each other\'s comments, and provides stronger spatial analysis and system-level engagement mapping.', icon:'🗾' },
+    { name:'Planning Simulator', person:'Margit Liander', idea:'Interactive planning simulators that let residents experiment with scenarios, immediately visualize trade-offs, and understand the consequences of different land use decisions before providing feedback.', icon:'🎛' },
+    { name:'Community GIS', person:'Jane Cole', idea:'A simple, highly visual, user-friendly GIS platform that both planners and non-experts can use together during engagement sessions without needing any technical knowledge.', icon:'🌍' },
+    { name:'Visual Trade-off Game', person:'Maya Diaz', idea:'A gamified engagement platform that translates complicated planning concepts into intuitive graphics and interactive scenarios instead of text-heavy reports, making trade-offs tangible.', icon:'🎲' },
+    { name:'The Long Game', person:'Robert Sugar', idea:'An immersive engagement platform using AR or VR to help communities experience planning proposals, with real-time analysis and visualization built directly into the platform rather than requiring post-production.', icon:'🥽' },
+    { name:'Progress Dashboard', person:'Jazzlynn Derrick', idea:'A public accountability platform that allows participants to follow the full lifecycle of their contributions — from initial engagement, to the master plan, to implementation, to completed projects — making planning accountability visible and continuous.', icon:'📋' },
   ];
 
-  const colors2 = ['#8c99c1','#a88cad','#7fad96','#5F6E9E','#A8495C','#ad9b7f','#4F7D63','#9387AD','#7D5E83'];
+  const colors2 = ['#8c99c1','#a88cad','#7fad96','#5F6E9E','#A8495C','#ad9b7f','#4F7D63','#9387AD','#7D5E83','#8C7D52','#5e7a6b','#6B8C7A','#B0568C','#8B95B0','#b78e8e'];
   const toolsEl = document.getElementById('imagined-tools');
   const grid = document.createElement('div');
   grid.className = 'imagined-tools-grid';
@@ -3515,41 +3642,66 @@ const itoolImages = {
   document.head.appendChild(qStyle);
 
   const quotes = [
-    { text: "I think the most frustrating part is probably managing the data after that point... it's very easy for it to live in a spreadsheet that nobody opens again.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Data Management","Communication"] },
-    { text: "We do a lot of voting... and a lot of stickies on a map with preselected items. But I think new creative things are something that's maybe a little bit less explored in the Sasaki engagement toolkit.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Co-Design","Creative Visioning"] },
-    { text: "Having tech sometimes hinders the conversation... you're locked into your thing while you're filling out the survey rather than having discussion about it.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Technocratic Critique","Technology"] },
-    { text: "It's usually at the end of the day, trust... if they don't think that their voice is going to matter, then they won't show up.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Trust"] },
-    { text: "Successful engagement to me looks like a dialogue... you have what they give you, and then you present it back to them, get it right, and then make sure that you're incorporating that within the design and connecting those dots for the community.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Feedback Loop","Traceability"] },
+    { text: "I think the most frustrating part is probably managing the data after that point... it\'s very easy for it to live in a spreadsheet that nobody opens again.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Data Management","Communication"] },
+    { text: "We do a lot of voting... and a lot of stickies on a map with preselected items. But I think new creative things are something that\'s maybe a little bit less explored in the Sasaki engagement toolkit.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Co-Design","Creative Visioning"] },
+    { text: "Having tech sometimes hinders the conversation... you\'re locked into your thing while you\'re filling out the survey rather than having discussion about it.", name:"Annabel Consilvio", role:"Urban Planning", themes:["Technocratic Critique","Technology"] },
+    { text: "It\'s usually at the end of the day, trust... if they don\'t think that their voice is going to matter, then they won\'t show up.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Trust"] },
+    { text: "Successful engagement to me looks like a dialogue... you have what they give you, and then you present it back to them, get it right, and then make sure that you\'re incorporating that within the design and connecting those dots for the community.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Feedback Loop","Traceability"] },
     { text: "The processing time on the back end is also generally a heavy lift.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Data Management"] },
-    { text: "You're reading every single comment, so you learn a lot about how people are thinking or engaging with your materials... it really helps to have to do that, even though it's a lot of work.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Learning","Understanding Community Needs"] },
-    { text: "A lot of people just use Instagram or TikTok... getting through to people on those platforms in a really catchy way. I don't think as a firm we do that very well yet.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Education","Social Media","Storytelling"] },
-    { text: "Considering the demographics of who you're trying to reach and digital access is helpful... We knew we were trying to reach elderly folks and people that might not have a lot of internet access, so we focused more on in-person strategies.", name:"Felicia Jiang", role:"Urban Planning", themes:["Digital Access","Digital vs In Person"] },
-    { text: "Usually we just put stuff into spreadsheets... We do a lot of sticky notes... then you might have 300 sticky notes that you have to type up. That's obviously very time consuming, and it would be cool if there was a different way to do that.", name:"Felicia Jiang", role:"Urban Planning", themes:["Data Management","Digitizing Paper-Based Engagement"] },
-    { text: "People can leave a comment, but when you download the comments as a CSV, I don't think it includes any identifying information... We wanted to map those comments because sometimes people just write 'I love this' or 'I hate this,' and we don't know what 'this' is referring to.", name:"Felicia Jiang", role:"Urban Planning", themes:["CoMap","Data Management","Exporting Geo-coded Data"] },
+    { text: "You\'re reading every single comment, so you learn a lot about how people are thinking or engaging with your materials... it really helps to have to do that, even though it\'s a lot of work.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Learning","Understanding Community Needs"] },
+    { text: "A lot of people just use Instagram or TikTok... getting through to people on those platforms in a really catchy way. I don\'t think as a firm we do that very well yet.", name:"Tanvi Sharma", role:"Urban Planning", themes:["Education","Social Media","Storytelling"] },
+    { text: "Considering the demographics of who you\'re trying to reach and digital access is helpful... We knew we were trying to reach elderly folks and people that might not have a lot of internet access, so we focused more on in-person strategies.", name:"Felicia Jiang", role:"Urban Planning", themes:["Digital Access","Digital VS In Person"] },
+    { text: "Usually we just put stuff into spreadsheets... We do a lot of sticky notes... then you might have 300 sticky notes that you have to type up. That\'s obviously very time consuming, and it would be cool if there was a different way to do that.", name:"Felicia Jiang", role:"Urban Planning", themes:["Data Management","Digitizing Paper-Based Engagement"] },
+    { text: "People can leave a comment, but when you download the comments as a CSV, I don\'t think it includes any identifying information... We wanted to map those comments because sometimes people just write \'I love this\' or \'I hate this,\' and we don\'t know what \'this\' is referring to.", name:"Felicia Jiang", role:"Urban Planning", themes:["CoMap","Data Management","Exporting Geo-coded Data"] },
     { text: "One of the things that I think is a real strength of Sasaki is that we bring such novelty to these projects. With almost every engagement campaign that I work on, as long as the budget is sufficient enough, we do a high degree of customization.", name:"Chris Freda", role:"Urban Planning", themes:["Customization"] },
-    { text: "We've found a lot of utility lately in using CoMap as an opportunity for folks to explore the proposals we're making later in a project. Instead of using a Google Maps base, we created an exhibit summarizing all the recommendations and collected responses on specific design proposals.", name:"Chris Freda", role:"Urban Planning", themes:["CoMap","Customization"] },
+    { text: "We\'ve found a lot of utility lately in using CoMap as an opportunity for folks to explore the proposals we\'re making later in a project. Instead of using a Google Maps base, we created an exhibit summarizing all the recommendations and collected responses on specific design proposals.", name:"Chris Freda", role:"Urban Planning", themes:["CoMap","Customization"] },
     { text: "Some version of a tool that allows me to plug in the variables of an engagement campaign and automatically generate the production schedule would be great. Right now I recreate these timelines over and over again in Google Slides for every project.", name:"Chris Freda", role:"Urban Planning", themes:["Dream Tool"] },
     { text: "Maybe if there was a device that you could feed sticky notes into and it would just type them up for you... because it takes a long time, especially reading really messy handwriting.", name:"Felicia Jiang", role:"Urban Planning", themes:["Dream Tool"] },
-    { text: "The important thing is not the ability for someone in the community to come in and see this rendering of a future condition. It's more about the discussion and centering some of the conflict that always comes up in these discussions as part of an engagement tool.", name:"Eliza Dekker", role:"Urban Planning", themes:["Discussion","Trade-Offs","Education"] },
+    { text: "The important thing is not the ability for someone in the community to come in and see this rendering of a future condition. It\'s more about the discussion and centering some of the conflict that always comes up in these discussions as part of an engagement tool.", name:"Eliza Dekker", role:"Urban Planning", themes:["Discussion","Trade-Offs","Education"] },
     { text: "One of the most important things for the plan to actually be adopted is that the city council or the planning commission really understands what it means for the city and the benefits or the challenges.", name:"Eliza Dekker", role:"Urban Planning", themes:["Adoption","Education","Storytelling"] },
     { text: "The city needs money in order to create some of these public benefits... trying to tell that story too.", name:"Eliza Dekker", role:"Urban Planning", themes:["Storytelling"] },
-    { text: "So much of community engagement is just the education of the public... the more you can educate people and really ask them to think about those hard questions, I think the more informed data you're going to get out of it.", name:"Emilie Forbes", role:"Urban Design", themes:["Education","Learning"] },
-    { text: "A lot of our clients are asking for more and more innovative ways of engaging the public. They don't just want the typical online survey or sticky-dot exercise.", name:"Emilie Forbes", role:"Urban Design", themes:["Client Expectation","Innovation"] },
-    { text: "I think the more informed the public is moving forward, the better they'll understand how things work and how to ask for things.", name:"Emilie Forbes", role:"Urban Design", themes:["Education","Learning"] },
-    { text: "You're getting thousands and thousands of comments, and it can be so hard to read all of them and make sure you're synthesizing them appropriately and accurately.", name:"Emilie Forbes", role:"Urban Design", themes:["Data Management","Processing","Storytelling"] },
-    { text: "We made a pretty big effort to make sure our locations were diverse... we offered multiple times, knowing childcare can be hard, and if someone couldn't come to an event they could still provide the same input online.", name:"Emilie Forbes", role:"Urban Design", themes:["Demographics","Equity","Feedback Loop","Trust"] },
-    { text: "The first step is site analysis and listening to what people need. During that process it's educating the general public about the opportunities and constraints on the site and helping them understand the place.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Education","Learning","Listening"] },
-    { text: "You're not asking people, 'Do you want option one or option two?' Instead you're asking, 'Do you like this circulation? Do you like this parking? Which elements do you prefer?'", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Listening","Surveys"] },
-    { text: "A general point that we often get is it's hard to reach younger people and people of color... the people who normally look at city websites are people who are retired or already like to engage in this process.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Demographics","Equity","Trust"] },
-    { text: "If something happens near the playgrounds in the community and there are volunteers talking to parents there, then you'll get a lot of great feedback from people who don't have time to go to town hall meetings.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Demographics","Equity","Trust"] },
+    { text: "So much of community engagement is just the education of the public... the more you can educate people and really ask them to think about those hard questions, I think the more informed data you\'re going to get out of it.", name:"Emilie Forbes", role:"Urban Design", themes:["Education","Learning"] },
+    { text: "A lot of our clients are asking for more and more innovative ways of engaging the public. They don\'t just want the typical online survey or sticky-dot exercise.", name:"Emilie Forbes", role:"Urban Design", themes:["Client Expectation","Innovation"] },
+    { text: "I think the more informed the public is moving forward, the better they\'ll understand how things work and how to ask for things.", name:"Emilie Forbes", role:"Urban Design", themes:["Education","Learning"] },
+    { text: "You\'re getting thousands and thousands of comments, and it can be so hard to read all of them and make sure you\'re synthesizing them appropriately and accurately.", name:"Emilie Forbes", role:"Urban Design", themes:["Data Management","Processing","Storytelling"] },
+    { text: "We made a pretty big effort to make sure our locations were diverse... we offered multiple times, knowing childcare can be hard, and if someone couldn\'t come to an event they could still provide the same input online.", name:"Emilie Forbes", role:"Urban Design", themes:["Demographics","Equity","Feedback Loop","Trust"] },
+    { text: "The first step is site analysis and listening to what people need. During that process it\'s educating the general public about the opportunities and constraints on the site and helping them understand the place.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Education","Learning","Listening"] },
+    { text: "You\'re not asking people, \'Do you want option one or option two?\' Instead you\'re asking, \'Do you like this circulation? Do you like this parking? Which elements do you prefer?\'", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Listening","Surveys"] },
+    { text: "A general point that we often get is it\'s hard to reach younger people and people of color... the people who normally look at city websites are people who are retired or already like to engage in this process.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Demographics","Equity","Trust"] },
+    { text: "If something happens near the playgrounds in the community and there are volunteers talking to parents there, then you\'ll get a lot of great feedback from people who don\'t have time to go to town hall meetings.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Demographics","Equity","Trust"] },
     { text: "If you make the process more efficient and less costly, you can use that time to do more engagement, have more conversations, or focus less on time-consuming data analysis.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Data Management","Efficiency"] },
     { text: "I wish there was a more creative way that we could engage younger people.", name:"Lanmuzhi Yang", role:"Landscape Architecture", themes:["Gamification","Innovation","Youth"] },
-    { text: "What really excites me about the future of engagement is connecting the physical and the digital.", name:"Suna Sen", role:"Urban Design", themes:["Digital vs In Person","Hybrid","Innovation"] },
-    { text: "People just want to talk all the time. I think the audio component is huge. There's so much value in what is said in conversation.", name:"Suna Sen", role:"Urban Design", themes:["Communication","Listening","Trust"] },
+    { text: "What really excites me about the future of engagement is connecting the physical and the digital.", name:"Suna Sen", role:"Urban Design", themes:["Digital VS In Person","Hybrid","Innovation"] },
+    { text: "People just want to talk all the time. I think the audio component is huge. There\'s so much value in what is said in conversation.", name:"Suna Sen", role:"Urban Design", themes:["Communication","Listening","Trust"] },
     { text: "We showed what we heard, then a synthesized map of what different groups proposed, and then the design. They were very close, so I think people felt like they were heard.", name:"Suna Sen", role:"Urban Design", themes:["Feedback Loop","Listening","Traceability"] },
-    { text: "Nobody wants to write on a sticky note. They'll put dots because that feels like less friction, but people just want to talk.", name:"Suna Sen", role:"Urban Design", themes:["Communication","Reducing Friction"] },
+    { text: "Nobody wants to write on a sticky note. They\'ll put dots because that feels like less friction, but people just want to talk.", name:"Suna Sen", role:"Urban Design", themes:["Communication","Reducing Friction"] },
+    { text: "The more that we can do things within the tool itself and minimize the amount of post-production in Illustrator or PowerPoint, I think could be helpful.", name:"Robert Sugar", role:"Urban Planning", themes:["Efficiency","Reducing Friction","Technology"] },
+    { text: "It\'s tough to infer, are we getting a big enough sample to really make big physical changes on campus with the survey results?", name:"Robert Sugar", role:"Urban Planning", themes:["Demographics","Representation","Traceability"] },
+    { text: "Sometimes I feel like we are trying to make sure that those decisions are presented back to the campus community in a way that is clearly data informed and supported by a strong rationale.", name:"Robert Sugar", role:"Urban Planning", themes:["Decision-making","Traceability"] },
+    { text: "Having ways that we can make it more immersive or more engaging, I think could be something that I\'d be really excited to experiment with in the future.", name:"Robert Sugar", role:"Urban Planning", themes:["Education","Innovation","Technology"] },
+    { text: "I do feel like we approach it as a series of discrete tools that all have their own data sets... if there was a way to combine them, that would be helpful.", name:"Robert Sugar", role:"Urban Planning", themes:["Data Fragmentation","Data Management","Efficiency"] },
+    { text: "What would be cool is if you could just snap a picture of that and integrate that photograph into the actual CoMap data.", name:"Robert Sugar", role:"Urban Planning", themes:["CoMap","Hybrid"] },
+    { text: "Sometimes people don\'t really know what they want... we can\'t just do anything and everything the community wants.", name:"Maya Diaz", role:"Urban Planning", themes:["Discussion","Negotiation","Trade-Offs"] },
+    { text: "A lot of times it\'s just old white people, literally, in most of our engagement... we\'re trying, but it\'s still an issue I\'ve seen.", name:"Maya Diaz", role:"Urban Planning", themes:["Demographics","Equity","Representation"] },
+    { text: "I think it\'s super important to synthesize these really weird, complex ideas... and actually illustrate to your clients or the community what we\'re talking about.", name:"Maya Diaz", role:"Urban Planning", themes:["Communication","Data Management","Learning","Simplicity"] },
+    { text: "Some kind of survey format that almost gamifies complicated ideas or personifies these ideas instead of everything being so text heavy all the time.", name:"Maya Diaz", role:"Urban Planning", themes:["Gamification","Learning","Simplicity","Youth"] },
+    { text: "If there could be more continuity between the tools or the game... if it\'s all somehow embedded in the same platform, I feel like that could be a powerful and useful way to just have everything in one place.", name:"Ethan Lay Sleeper", role:"Urban Planning", themes:["Data Fragmentation","Feedback Loop","Traceability"] },
+    { text: "I don\'t think we\'re necessarily losing data. I think what we\'re losing is attention and retention of participants, because it\'s another damn thing to log into.", name:"Ethan Lay Sleeper", role:"Urban Planning", themes:["Survey Fatigue"] },
+    { text: "If there was some way for people to have an archive or see, \'Oh yeah, this is what I did back in March, and now it\'s June and I\'m doing phase two,\' I think some structure like that could be effective.", name:"Ethan Lay Sleeper", role:"Urban Planning", themes:["Data Management","Traceability"] },
+    { text: "The issue I always had with CrowdGauge is that it had a little bit of a learning curve... it just felt a little bit too dense, given all the stuff people are saturated with today.", name:"Ethan Lay Sleeper", role:"Urban Planning", themes:["Survey Fatigue"] },
+    { text: "We\'re going to be partnering with ETC to do a statistically valid survey... they\'re going to get a thousand-person sample that represents the actual demographics.", name:"Carrie Latimer", role:"Urban Planning", themes:["Representation"] },
+    { text: "A lot of the actual recommendations for the plan came from the leadership level versus the actual engagement feedback.", name:"Carrie Latimer", role:"Urban Planning", themes:["Decision-making","Feedback Loop","Traceability"] },
+    { text: "Balance Builder wasn\'t really to form any of the uses. It was more of an education tool to bring the community along with why we were making the decisions we were making.", name:"Carrie Latimer", role:"Urban Planning", themes:["Decision-making","Education","Traceability"] },
+    { text: "The most impact I\'ve seen is when you actually challenge the community with an interactive game... putting them in the decision-maker seat for a moment.", name:"Carrie Latimer", role:"Urban Planning", themes:["Discussion","Education","Gamification","Trade-Offs"] },
+    { text: "It\'s a really unique tool, but I feel like we\'re on the cusp of... it\'s old. Other firms are doing it better and I don\'t feel like it\'s a differentiator for us anymore.", name:"Carrie Latimer", role:"Urban Planning", themes:["CoMap"] },
+    { text: "Everyone wanted conservation, but that\'s not free... is there an amount of small development that would be palatable to the community that could actually help fund that conservation?", name:"Margit Liander", role:"Urban Planning", themes:["Trade-Offs"] },
+    { text: "They were able to understand the impacts of different land uses in real time, which was great.", name:"Margit Liander", role:"Urban Planning", themes:["Education","Trade-Offs"] },
+    { text: "People had questions around the built-in assumptions... maybe having a simpler way to communicate the assumptions that went into generating the results would have been helpful.", name:"Margit Liander", role:"Urban Planning", themes:["Feedback Loop","Traceability","Trust"] },
+    { text: "Rather than sharing our detailed spreadsheets back with them, something that\'s a little bit more visual in terms of sharing our analysis.", name:"Margit Liander", role:"Urban Planning", themes:["Communication","Data Management","Data Visualization"] },
+    { text: "How do you engage certain populations that really just don\'t have that extra time, but also maybe need that fun, gamified incentive to do something and share back?", name:"Margit Liander", role:"Urban Planning", themes:["Gamification","Youth"] },
+    { text: "My axe to grind is actually that I think that there is a trend that I find worrying in planning right now around gamifying everything.", name:"Jazzlynn Derrick", role:"Urban Planning", themes:["Gamification","Technocratic Critique"] },
+    { text: "It is genuinely infantilizing to adult people, to invite someone who has a full-time job, maybe works hourly and needed childcare to come here and say, I\'m going to take two hours of your time and make you play a board game, instead of just asking me, like an adult, what your input is.", name:"Jazzlynn Derrick", role:"Urban Planning", themes:["Gamification","Respect","Trust"] },
   ];
-
   // Collect all unique themes
   const allThemes = [...new Set(quotes.flatMap(q => q.themes))].sort();
 
@@ -3773,71 +3925,6 @@ const itoolImages = {
     <div class="disc-donut-wrap">${donutSVG}</div>
     <div class="disc-legend">${legend}</div>`;
 
-  // Filter pills
-  const filterDiv = document.getElementById('interview-filters');
-  let activeFilter = 'all';
-
-  const filters = [
-    {key:'all', label:'All'},
-    {key:'scheduled', label:'Scheduled'},
-    {key:'reached', label:'Reached out'},
-    {key:'notYet', label:'Not yet contacted'},
-    ...Object.keys(discColors).map(d => ({key:d, label:d}))
-  ];
-
-  filters.forEach(f => {
-    const pill = document.createElement('button');
-    pill.className = 'if-pill' + (f.key === 'all' ? ' active' : '');
-    pill.textContent = f.label;
-    pill.addEventListener('click', () => {
-      activeFilter = f.key;
-      document.querySelectorAll('.if-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      updateGrid();
-    });
-    filterDiv.appendChild(pill);
-  });
-
-  // Interview cards
-  const grid = document.getElementById('interview-grid');
-  const detail = document.getElementById('interview-detail');
-
-  people.forEach(p => {
-    const status = p.scheduled ? 'scheduled' : (p.reached ? 'reached' : 'notYet');
-    const sc = statusConfig[status];
-    const card = document.createElement('div');
-    card.className = 'icard';
-    card.dataset.disc = p.disc;
-    card.dataset.status = status;
-    card.innerHTML = `
-      <div class="icard-name">${p.name}</div>
-      <div class="icard-disc">${p.disc}</div>
-      <div class="icard-status">
-        <div class="icard-dot" style="background:${sc.color}; margin-top:3px;"></div>
-        <div class="icard-status-label">${sc.label}</div>
-      </div>`;
-    card.addEventListener('click', () => {
-      detail.innerHTML = `
-        <button class="id-close" onclick="document.getElementById('interview-detail').classList.remove('open')">✕</button>
-        <div class="id-name">${p.name}</div>
-        <div class="id-disc">${p.disc}</div>
-        <div class="id-project">${p.project ? 'Project context: ' + p.project : 'No specific project context noted.'}</div>
-        <div class="id-project" style="margin-top:6px;">
-          <span style="display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; padding:3px 9px; border-radius:2px; background:${sc.color}22; color:${sc.color}; border:1px solid ${sc.color}44;">${sc.label}</span>
-        </div>`;
-      detail.classList.add('open');
-    });
-    grid.appendChild(card);
-  });
-
-  function updateGrid() {
-    document.querySelectorAll('.icard').forEach(card => {
-      const matchStatus = ['scheduled','reached','notYet'].includes(activeFilter) && card.dataset.status === activeFilter;
-      const matchDisc = Object.keys(discColors).includes(activeFilter) && card.dataset.disc.includes(activeFilter);
-      const show = activeFilter === 'all' || matchStatus || matchDisc;
-      card.classList.toggle('dimmed', !show);
-    });
-  }
 })();
 
 // ---- Market research JS below ----
@@ -3887,14 +3974,14 @@ const highlights = [
     mark: "S",
     color: "#4F7D63",
     tagline: "A 3D game environment for community design",
-    text: "SuperBarrio turns urban planning into something playable. By putting community design into an immersive 3D game, it gives younger people a hands-on, visual way to learn about urban issues and contribute real ideas that planners can use. Participation that doesn't feel like a survey."
+    text: "SuperBarrio turns urban planning into something playable. By putting community design into an immersive 3D game, it gives younger people a hands-on, visual way to learn about urban issues and contribute real ideas that planners can use. Participation that doesn\'t feel like a survey."
   },
   {
     name: "Social Point",
     mark: "P",
     color: "#7A2E40",
     tagline: "Bridging conversations between stakeholders and communities",
-    text: "Social Point stands out for connecting stakeholder and community conversations in one place, with an interface that's clean, fun, and intuitive. It manages to feel approachable without sacrificing the structure needed to turn input into real project decisions."
+    text: "Social Point stands out for connecting stakeholder and community conversations in one place, with an interface that\'s clean, fun, and intuitive. It manages to feel approachable without sacrificing the structure needed to turn input into real project decisions."
   }
 ];
 
