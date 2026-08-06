@@ -687,6 +687,7 @@
   <button class="tab-btn" onclick="switchTab('tools')">Internal Tools</button>
   <button class="tab-btn" onclick="switchTab('interviews')">Internal Interviews</button>
   <button class="tab-btn" onclick="switchTab('practices')">Creative Practices</button>
+  <button class="tab-btn" onclick="switchTab('findings')">Findings + Opportunities</button>
 </nav>
 
 <div class="tab-panel" id="tab-market">
@@ -1085,6 +1086,162 @@
 
 </div>
 </div><!-- end tab-interviews -->
+
+<div class="tab-panel" id="tab-findings">
+<div class="wrap">
+  <div class="hero">
+    <p class="hero-eyebrow">Internal Interviews</p>
+    <h1>Findings + Opportunities</h1>
+    <p class="hero-sub">Nine recurring themes from sixteen conversations, and thirteen product opportunities that connect them. Click any theme or opportunity to see what connects to it.</p>
+    <div class="stats-row">
+      <div class="stat-block"><span class="stat-num">9</span><span class="stat-label">Themes</span></div>
+      <div class="stat-block"><span class="stat-num">13</span><span class="stat-label">Opportunities</span></div>
+      <div class="stat-block"><span class="stat-num">40</span><span class="stat-label">Pain Points</span></div>
+      <div class="stat-block"><span class="stat-num">16</span><span class="stat-label">Conversations</span></div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:start;">
+
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#8c99c1; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:2px solid #8c99c1;">Themes</div>
+      <div id="fo-themes" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
+    </div>
+
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#a88cad; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:2px solid #a88cad;">Opportunities</div>
+      <div id="fo-opps" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
+    </div>
+
+  </div>
+</div>
+</div><!-- end tab-findings -->
+
+<script>
+const themesData = [
+  { id:'conversation', label:'In Service of the Conversation', summary:'Digital tools help most when they make it easier for people to talk. When a survey or a screen gets in the way, it stops helping.', detail:'Designers put conversation above surveys and screens every time. Tools help when they capture or shape that conversation through audio or well-built games, and hurt when they add friction through extra logins or mindless clicking. The cost of friction is not lost data, it is lost participants and lost attention.', voices:['Annabel','Suna','Lanmuzhi','Chris','Robert'] },
+  { id:'trust', label:'Reciprocity Creates Trust', summary:'People only show up and speak honestly when they trust the process. Trust has to be built through local partners and showing input actually changed something.', detail:'Trust is the precondition for everything. Without it, people either stay away or hold back, and no tool can make up the difference. Trust is built through local partners who already have standing in the community, not by the design team alone.', voices:['Annabel','Ethan','Jazzlynn','Tanvi'] },
+  { id:'design', label:'What Actually Shapes the Design', summary:'What the community asks for, what the client wants, and what really drives the design often do not line up.', detail:'Engagement data sometimes just backs up a direction leadership already set. The fix is being upfront about trade-offs and teaching people the real constraints before asking them to weigh in.', voices:['Robert','Carrie','Maya','Margit','Chris'] },
+  { id:'meetpeople', label:'Meet People Where They Already Are', summary:'Engagement works best when it goes to where people already are instead of waiting for them at a town hall.', detail:'Town halls mostly reach people who already want to take part. Going to where people already are, like playgrounds, festivals, and farmers markets, reaches the people town halls miss.', voices:['Lanmuzhi','Maya','Carrie','Tanvi'] },
+  { id:'structure', label:'Structure That Leaves Room', summary:'Good engagement is planned rigorously and still leaves room to improvise. The tactics that work best are often chosen mid-stream.', detail:'Structure does the heavy lifting up front. The plan works best as a living document rather than a script, firm enough to keep things organized, loose enough to take on what comes up.', voices:['Robert','Chris','Suna','Tanvi'] },
+  { id:'bespoke', label:'The Limits of Bespoke', summary:"Designers want to engage in more creative, bespoke ways and treat that novelty as Sasaki's edge. But the ambition consistently runs ahead of the resources.", detail:'Custom engagement is what sets Sasaki apart. But every custom build needs resources, time, and effort. Strategies is an ambitious department but it is not a tech company, and requests often exceed the resources to build them.', voices:['Chris','Eliza','Tanvi','Margit','Daniel','Carrie'] },
+  { id:'synthesis', label:'The Synthesis Bottleneck', summary:'Engagement data ends up scattered across CoMap, survey tools, sign-in sheets, and sticky notes, and pulling it together is slow and expensive.', detail:'Making sense of responses is the slow and expensive part. Data lands scattered across separate tools and stitching it together is manual work. Automation does not solve this yet.', voices:['Annabel','Daniel','Tanvi','Suna'] },
+  { id:'method', label:'A Method for Every Phase', summary:'No single method works for a whole project. Early on the work is listening and setting values. Later it is reacting to proposals and weighing trade-offs.', detail:'Engagement moves through clear phases and each needs a different method. What ties it all together is the people. When the same participants stick around across phases, the context builds instead of starting over.', voices:['Lanmuzhi','Carrie','Tanvi','Ethan'] },
+  { id:'accountability', label:'Holding Sasaki and Its Partners Accountable', summary:'Engagement practices differ from project to project. The firm has no shared standard, and communities often cannot tell what happened to their input.', detail:'Whether a team closes the loop or engages transparently is left to individuals. That gap is felt most by communities, who often cannot tell what happened to their input, whether it was read, weighed, or acted on.', voices:['Suna','Jazzlynn','Ethan','Tanvi'] }
+];
+
+const oppsData = [
+  { id:'accountability-platform', label:'Accountability Tracking Platform', summary:'A platform that evaluates the quality of community engagement using measurable indicators like diversity, inclusion, transparency, and follow-through.', themes:['accountability','trust','synthesis'] },
+  { id:'equity-framework', label:'Equity and Access Framework', summary:'A method-selection framework that helps teams design engagement around who needs to be reached, where they are, and what barriers they face.', themes:['meetpeople','trust','structure','method'] },
+  { id:'gamification', label:'Gamification', summary:'A shift away from rule-heavy gamification toward playfulness and storytelling that gives communities greater ownership over how their experiences are shared.', themes:['conversation','meetpeople','trust','bespoke'] },
+  { id:'storytelling', label:'Storytelling and Adoption Layer', summary:'A way to translate engagement findings into client and community-facing narratives that explain what was heard, what changed, and why.', themes:['accountability','design','synthesis','method'] },
+  { id:'friction', label:'Designing for the Right Kind of Friction', summary:'Engagement tools and workflows that strip out operational friction while preserving the reflective, deliberative, and educational kind.', themes:['conversation','synthesis','design','structure'] },
+  { id:'participatory', label:'Participatory Storytelling', summary:'A tool that lets participants capture rich lived experience through photos, recordings, and reflections, giving them ownership over their contributions.', themes:['trust','conversation','meetpeople','design'] },
+  { id:'feedback', label:'Improved Feedback Loops', summary:'Better, more transparent communication of engagement results back to the community so participation feels like a two-way exchange.', themes:['accountability','trust','conversation','method'] },
+  { id:'envision', label:'Envision the Future', summary:'An immersive storytelling tool that lets participants visualize the future of their communities, making abstract proposals concrete enough to react to.', themes:['conversation','design','meetpeople'] },
+  { id:'synthesis-engine', label:'Engagement Synthesis Engine', summary:'A tool that processes comments, conversations, sticky notes, survey responses, maps, and other qualitative data into themes and outputs.', themes:['synthesis','conversation','method','accountability'] },
+  { id:'incentives', label:'Incentives', summary:'New ways to draw people into the process by making participation feel worthwhile, reciprocal, and even fun rather than another obligation.', themes:['meetpeople','trust','conversation','method'] },
+  { id:'os', label:'Engagement Operating System', summary:'A single platform connecting planning, participation, data capture, synthesis, visualization, and reporting in one place.', themes:['synthesis','method','structure','accountability'] },
+  { id:'toolkit', label:'Hybrid Engagement Toolkit', summary:'A set of reusable physical-digital engagement formats paired with a case study library so Sasakians can carry institutional knowledge forward.', themes:['bespoke','method','accountability','structure'] },
+  { id:'archive', label:'Engagement Archive with Metrics', summary:'A case study archive with a core set of evaluation metrics that are comparable across projects so engagement quality can be benchmarked.', themes:['accountability','synthesis','meetpeople','method'] }
+];
+
+let foSelected = null;
+let foSelectedType = null;
+
+function foRenderThemes() {
+  const el = document.getElementById('fo-themes');
+  if (!el) return;
+  el.innerHTML = themesData.map((t, i) => `
+    <div class="fo-theme-card" data-id="${t.id}"
+      style="background:#E4E7F3; border-radius:4px; border:1.5px solid #b8c0d8; padding:1rem 1.1rem; cursor:pointer; transition:opacity 0.18s, border-color 0.18s, box-shadow 0.18s;">
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+        <span style="font-family:'Fraunces',serif; font-size:11px; font-weight:700; color:#8c99c1; flex-shrink:0;">${i+1}</span>
+        <div style="font-family:'Fraunces',serif; font-size:13px; font-weight:600; color:var(--ink); line-height:1.3;">${t.label}</div>
+      </div>
+      <p style="font-size:11.5px; color:#5A6B7D; line-height:1.55; margin-bottom:0.6rem;">${t.summary}</p>
+      <div style="display:flex; flex-wrap:wrap; gap:3px;">
+        ${t.voices.map(v => `<span style="font-family:'JetBrains Mono',monospace; font-size:9px; background:#c8cee6; color:#4A5A8C; border-radius:2px; padding:2px 6px;">${v}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+  document.querySelectorAll('.fo-theme-card').forEach(card => {
+    card.addEventListener('click', () => foHandleClick('theme', card.dataset.id));
+  });
+}
+
+function foRenderOpps() {
+  const el = document.getElementById('fo-opps');
+  if (!el) return;
+  el.innerHTML = oppsData.map(o => `
+    <div class="fo-opp-card" data-id="${o.id}"
+      style="background:#F0EBF5; border-radius:4px; border:1.5px solid #d8c8e4; padding:1rem 1.1rem; cursor:pointer; transition:opacity 0.18s, border-color 0.18s, box-shadow 0.18s;">
+      <div style="font-family:'Fraunces',serif; font-size:13px; font-weight:600; color:var(--ink); line-height:1.3; margin-bottom:5px;">${o.label}</div>
+      <p style="font-size:11.5px; color:#6A5A7A; line-height:1.55; margin-bottom:0.6rem;">${o.summary}</p>
+      <div style="display:flex; flex-wrap:wrap; gap:3px;">
+        ${o.themes.map(tid => {
+          const t = themesData.find(x => x.id === tid);
+          return t ? `<span style="font-family:'JetBrains Mono',monospace; font-size:9px; background:#ddd6ea; color:#7A6B9A; border-radius:2px; padding:2px 6px;">${t.label.split(' ').slice(0,3).join(' ')}</span>` : '';
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+  document.querySelectorAll('.fo-opp-card').forEach(card => {
+    card.addEventListener('click', () => foHandleClick('opp', card.dataset.id));
+  });
+}
+
+function foHandleClick(type, id) {
+  // Clicking same card again = deselect
+  if (foSelected === id && foSelectedType === type) {
+    foSelected = null; foSelectedType = null;
+    foResetHighlight(); return;
+  }
+  foSelected = id; foSelectedType = type;
+
+  if (type === 'theme') {
+    const connIds = oppsData.filter(o => o.themes.includes(id)).map(o => o.id);
+    document.querySelectorAll('.fo-theme-card').forEach(c => {
+      const active = c.dataset.id === id;
+      c.style.opacity = active ? '1' : '0.2';
+      c.style.borderColor = active ? '#8c99c1' : '#b8c0d8';
+      c.style.boxShadow = active ? '0 2px 14px rgba(140,153,193,0.3)' : 'none';
+    });
+    document.querySelectorAll('.fo-opp-card').forEach(c => {
+      const active = connIds.includes(c.dataset.id);
+      c.style.opacity = active ? '1' : '0.2';
+      c.style.borderColor = active ? '#8c99c1' : '#d8c8e4';
+      c.style.boxShadow = active ? '0 2px 14px rgba(140,153,193,0.2)' : 'none';
+    });
+  } else {
+    const o = oppsData.find(x => x.id === id);
+    document.querySelectorAll('.fo-opp-card').forEach(c => {
+      const active = c.dataset.id === id;
+      c.style.opacity = active ? '1' : '0.2';
+      c.style.borderColor = active ? '#a88cad' : '#d8c8e4';
+      c.style.boxShadow = active ? '0 2px 14px rgba(168,140,173,0.3)' : 'none';
+    });
+    document.querySelectorAll('.fo-theme-card').forEach(c => {
+      const active = o.themes.includes(c.dataset.id);
+      c.style.opacity = active ? '1' : '0.2';
+      c.style.borderColor = active ? '#a88cad' : '#b8c0d8';
+      c.style.boxShadow = active ? '0 2px 14px rgba(168,140,173,0.2)' : 'none';
+    });
+  }
+}
+
+function foResetHighlight() {
+  document.querySelectorAll('.fo-theme-card').forEach(c => {
+    c.style.opacity = '1'; c.style.borderColor = '#b8c0d8'; c.style.boxShadow = 'none';
+  });
+  document.querySelectorAll('.fo-opp-card').forEach(c => {
+    c.style.opacity = '1'; c.style.borderColor = '#d8c8e4'; c.style.boxShadow = 'none';
+  });
+}
+
+foRenderThemes();
+foRenderOpps();
+</script>
 
 <script>
 const participation = {"Idea Generation": 5, "Playful Exploration": 4, "Participatory Budgeting": 5, "Polls": 5, "Co-Design": 4, "Community Dialogue": 4, "Automated Sensemaking": 3, "Discussion Forums": 3, "Surveys": 4, "Crowdsourcing": 3, "Audio Storytelling": 2, "Civic Learning": 2, "Design Comparison": 2, "Design Feedback": 2, "Community Building": 2, "Information Sharing": 2, "Mapping": 2, "Public Commenting": 2, "Web-Based Participation": 2, "Text/Voicemail Submissions": 1, "Youth Capacity Building": 1, "Resource Allocation": 1, "Evaluation": 1, "Issue Detection": 1, "Passive Listening": 1, "Consultation": 2, "Spatial Annotation": 2};
